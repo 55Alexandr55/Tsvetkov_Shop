@@ -1,3 +1,4 @@
+
 {% extends 'main/base.html' %}
 {% load static %}
 
@@ -7,10 +8,10 @@
     <div class="catalog d-flex">
         <form method="get" action="{% url 'main:catalog' %}" class="sidebar" id="filter-form">
 
-            <h4 class="price-head">Ценовой диапазон:</h4>
+            <h4 class="price-head">Цена,грн:</h4>
             <div class="price-range">
-                <input type="number" name="min_price" id="min_price" placeholder="Минимум" value="{{ request.GET.min_price }}" oninput="debounceApplyFilters()">
-                <input type="number" name="max_price" id="max_price" placeholder="Максимум" value="{{ request.GET.max_price }}" oninput="debounceApplyFilters()">
+                <input type="number" name="min_price" id="min_price" placeholder="от" value="{{ request.GET.min_price }}" oninput="debounceApplyFilters()">
+                <input type="number" name="max_price" id="max_price" placeholder="до" value="{{ request.GET.max_price }}" oninput="debounceApplyFilters()">
             </div>
 
             <h4 class="category-head">Категории:</h4>
@@ -19,7 +20,7 @@
                     <input type="checkbox" name="category" id="category-{{ category.slug }}" value="{{ category.slug }}"
                         {% if category.slug in selected_categories %} checked{% endif %} onchange="applyFilters()">
                     <label for="category-{{ category.slug }}" class="d-flex">
-                        <div class="category-name">{{ category.name }}</div> <div class="category-len">{{ category.get_item_count }}</div>
+                        <div class="category-name">{{ category.name }}</div>   <div class="category-len"> ({{ category.get_item_count }})</div>
                     </label>
                 </div>
             {% endfor %}
@@ -35,8 +36,8 @@
                                 <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">
                             {% endif %}
                             <div class="card-info">
-                                <h4>{{ item.name }}</h4>
-                                <p class="price">грн{{ item.get_price_with_discount }}</p>
+                                <h4>{{ item.name|truncatechars:55 }}</h4>
+                                <p class="price">{{ item.get_price_with_discount }}грн</p>
                             </div>
                         </a>
                     </div>

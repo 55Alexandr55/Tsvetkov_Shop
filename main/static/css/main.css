@@ -1,16 +1,101 @@
 body {
-    background-color: #242424;
+    background-color: #ffffff;
     color: #fff;
+    width: 1268px;
+    height: 1500px;
 }
 
 .container {
-    max-width: 1600px;
+    max-width: 1920px;
+    /*padding: 15;*/
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-.product-image {
-    width: 230px;
-    height: 350px;
+.sidebar {
+    width: 250px; /* ширина фильтра */
+    padding: 20px; /* внутренние отступы */
+    background-color: #ffffff;
+    border-right: 1px solid #ccc;
+    min-height: 100vh; /* на всю высоту страницы */
+    color: #121212;
+    font-size: 12px;
+    top: 0;
+    overflow-y: scroll;
+
+
+
 }
 
+.category-len{
+    padding-left: 7px;
+}
+
+
+.price-range {
+    display: flex;         /* размещает поля мин макс в ряд */
+    gap: 10px;             /* расстояние между полями */
+    align-items: center;   /* выравнивание по вертикали */
+    width: 270px;          /* фиксированная ширина */
+    padding-bottom: 20px;
+
+}
+
+.price-range input {
+    width: 80px; /* длина поля */
+
+}
+
+.price-head h4{
+  width: 10px;
+  height: 10px;
+  background-color: black; /* или любой цвет */
+  display: inline-block;
+  margin-right: 8px; /* отступ справа, если перед текстом */
+}
+
+
+.product-list {    /* класс с сеткой товаров */
+    flex-grow: 1;
+    padding: 0px;
+    width: 1268px;
+    height: 1500px;
+
+
+}
+.card {
+    width: 190px;
+    height: 306px;
+    margin: 1px;
+
+}
+
+.product-image {
+
+    width: 190px;
+    height: 210px;
+    padding-top: 30px;
+    padding-right: 3px;
+    padding-bottom: 20px;
+    padding-left: 3px;
+}
+
+.card-container d-flex flex-wrap{
+    width: 100px;
+    height: 140px;
+}
+
+.card-info h4{
+    height: 60px;
+    padding-left: 5px;
+
+    font-size: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+
+}
+
+.card-info p{
+    padding-left: 10px;
+    font-size: 12px;
+}
