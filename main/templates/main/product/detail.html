@@ -4,7 +4,7 @@
 {% block title %}
     {{ item.name }}
 {% endblock title %}
-
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
 {% block content %}
     <div class="detail-product d-flex">
         <div class="detail-img">
@@ -12,8 +12,12 @@
                 <img class="detail-image" src="{{ image.image.url }}" alt="{{ item.name }}" style="display: none;" data-index="{{ forloop.counter0 }}">
             {% endfor %}
             <div class="image-nav">
-                <button class="prev-btn">&lsaquo;</button>
-                <button class="next-btn">&rsaquo;</button>
+                <button class="prev-btn">
+                    <span class="btv-p"><</span>
+                </button>
+                <button class="next-btn">
+                    <span class="btv-n">></span>
+                </button>
             </div>
         </div>
         <script>

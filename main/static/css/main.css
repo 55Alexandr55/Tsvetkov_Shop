@@ -1,3 +1,4 @@
+
 body {
     background-color: #ffffff;
     color: #fff;
@@ -5,13 +6,19 @@ body {
     height: 1500px;
 }
 
+
 .container {
     max-width: 1920px;
-    /*padding: 15;*/
+    width: 100%;
     margin: 0 auto;
     padding: 40px 20px;
+    color: #121212;
 }
 
+
+
+
+/* СТИЛИ ДЛЯ Catalog HTML--------------------------------------------------------------------------------------------------*/
 .sidebar {
     width: 250px; /* ширина фильтра */
     padding: 20px; /* внутренние отступы */
@@ -42,7 +49,7 @@ body {
 }
 
 .price-range input {
-    width: 80px; /* длина поля */
+    width: 65px; /* длина поля */
 
 }
 
@@ -88,14 +95,70 @@ body {
 .card-info h4{
     height: 60px;
     padding-left: 5px;
-
+    color: #121212;
     font-size: 12px;
     white-space: normal;
     word-wrap: break-word;
 
 }
 
+
+
 .card-info p{
     padding-left: 10px;
     font-size: 12px;
+    color: #121212;
+    text-decoration: none !important;
 }
+
+/* СТИЛИ ДЛЯ DETAIL HTML--------------------------------------------------------------------------------------------------*/
+
+.detail-image {
+    width: 500px;
+    height: 700px;
+    position: relative; /* я родитель, можно что-то внутри меня*/
+}
+.detail-description {
+    color: #121212;
+}
+
+.prev-btn {
+    position: absolute;
+    left: 25px;
+    top: 380px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.btv-p{
+    position: absolute;
+    margin-bottom: 6px;
+    margin-right: 4px;
+}
+
+.next-btn {
+    position: absolute;
+    left: 480px;
+    top: 380px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btv-n {
+    position: absolute;
+    margin-bottom: 6px;
+    margin-left: 4px;
+}
+/* СТИЛИ ДЛЯ REGISTER HTML--------------------------------------------------------------------------------------------------*/
+

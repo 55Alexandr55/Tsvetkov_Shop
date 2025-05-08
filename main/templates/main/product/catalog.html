@@ -36,8 +36,8 @@
                                 <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">
                             {% endif %}
                             <div class="card-info">
-                                <h4>{{ item.name|truncatechars:55 }}</h4>
-                                <p class="price">{{ item.get_price_with_discount }}грн</p>
+                                <h4>{{ item.name|truncatechars:53 }}</h4>
+                                <p class="price">{{ item.get_price_with_discount|floatformat:0 }}  грн</p>
                             </div>
                         </a>
                     </div>
