@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings  # чтобы получить ссылку на текущую модель пользователя
 
 class Category(models.Model):
     #категории товаров
@@ -61,3 +61,6 @@ class ItemImage(models.Model):
     
     def __str__(self):
        return f'{self.product.name} - {self.image.name}'
+
+
+

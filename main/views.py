@@ -59,4 +59,6 @@ class ItemDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         item = self.object
         return context
-    
+
+
+

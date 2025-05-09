@@ -34,7 +34,13 @@ def user_login(request):
     return render(request, 'users/login.html', {'form': form})
 
 
+def user_profile(request):
+    return render(request, 'user/user_profile.html')
+
+
+
 @login_required
 def user_logout(request):
     logout(request)
     return redirect('users:login')
+
