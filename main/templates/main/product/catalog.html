@@ -40,6 +40,17 @@
                                 <p class="price">{{ item.get_price_with_discount|floatformat:0 }}  грн</p>
                             </div>
                         </a>
+
+                        <div class ="cartc" >
+                            <!--ДОБАВЛЕНИЕ В КОРЗИНУ -->
+                            <form action="{% url 'cart:cart_add' item.id %}" method="post">
+                                 {% csrf_token %}
+                                <button type="submit" class="btn-cart1" aria-label="Добавить в корзину">
+                                    <img src="{% static 'images/cart.png' %}" alt="Корзина" />
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 {% empty %}
                     <p>Нет товаров для отображения.</p>

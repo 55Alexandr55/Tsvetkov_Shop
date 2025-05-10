@@ -63,16 +63,7 @@
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
+    <!--ДОБАВЛЕНИЕ В КОРЗИНУ -->
     <form action="{% url 'cart:cart_add' item.id %}" method="post">
     {% csrf_token %}
     <button type="submit">Добавить в корзину</button>

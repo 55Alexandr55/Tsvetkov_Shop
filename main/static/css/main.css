@@ -16,6 +16,24 @@ my — по вертикали (вверх и вниз)
 auto = автоматический отступ
  */
 
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+}
+main {
+    display: flex;
+    justify-content: center; /* центрируем содержимое по горизонтали */
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px;
+}
+
+
 
 a {
     color: white;
@@ -25,7 +43,7 @@ li {
     list-style: none;
 }
 
-body {
+body1 {
     background-color: #ffffff;
     color: #fff;
     width: 1268px;
@@ -40,6 +58,7 @@ header {
     height: 60px;
 }
 
+
 .site-logo {
     width: 95px;
     height: 54px;
@@ -47,7 +66,10 @@ header {
     margin-top: 3px;
 }
 
-.container {
+
+
+
+.container1 {
     max-width: 1920px;
     width: 100%;
     margin: 0 auto;
@@ -120,6 +142,23 @@ header {
     width: 190px;
     height: 306px;
     margin: 1px;
+    position: relative;
+    overflow: hidden;
+
+}
+.cartc{
+    position: absolute;   /*relative; /* position: absolute; */
+    top: 270px;
+    font-size: 10px;
+    left: 130px;
+    background: white;
+
+}
+
+.cartc img{
+    width: 20px;
+    height: 20px;
+    background: white;
 
 }
 
@@ -139,7 +178,7 @@ header {
 }
 
 .card-info h4{
-    height: 60px;
+    height: 50px;
     padding-left: 5px;
     color: #121212;
     font-size: 12px;
@@ -149,10 +188,11 @@ header {
 }
 
 
-
 .card-info p{
-    padding-left: 10px;
-    font-size: 12px;
+    padding-left: 20px;
+    padding-top: 4px;
+
+    font-size: 14px;
     color: #121212;
     text-decoration: none !important;
 }
