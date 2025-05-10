@@ -4,10 +4,12 @@
 {% block title %}Регистрация{% endblock title %}
 
 {% block content %}
+<div class="register-cont d-flex flex-column align-items-center mx-auto">
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class=" btn btn-outline-dark">Зарегистрироваться</button>
         <a href="/users/login/" class="btn btn-outline-dark">Вход</a>
     </form>
+</div>
 {% endblock content %}

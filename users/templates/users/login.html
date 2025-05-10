@@ -7,11 +7,12 @@
 
 {% block content %}
 
-
+<div class="login-cont d-flex flex-column align-items-center">
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class=" btn btn-outline-dark">Вход</button>
         <a href="/users/register/" class="btn btn-outline-dark">Регистрация</a>
     </form>
+</div>
 {% endblock content %}

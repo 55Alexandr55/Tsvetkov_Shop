@@ -19,10 +19,11 @@
 </head>
 <body>
     <header class="header sticky-top">
-        <div class="header-container d-flex">
+        <div class="header-container d-flex justify-content-center">
             <div class="header-logo ">
-                <a href="/"><img src="static/logosite.png" alt="#" class="site-logo"></a>
-                <!-- <a href="/"><img src="static\logosite.png" alt="#" class="site-logo"></a>-->
+                <a href="/"><img src="{% static 'images/logosite.png' %}" alt="Логотип" class="site-logo"></a>
+                <!-- <img src="{% static 'images/logosite.png' %}" alt="Логотип" class="site-logo">
+-->
             </div>
             <navbar class="header-nav pt-4 ">
                 <ul class="header-list d-flex">
