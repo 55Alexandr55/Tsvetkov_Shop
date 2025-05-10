@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'main',
     # логин, регистрация, выход с профиля
     'users',
+    #корзина покупок
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +147,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # для работы users
 AUTH_USER_MODEL = 'users.User'
+
+CART_SESSION_ID = 'cart'

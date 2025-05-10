@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings  # чтобы получить ссылку на текущую модель пользователя
+
 
 class Category(models.Model):
     #категории товаров

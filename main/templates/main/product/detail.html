@@ -61,4 +61,20 @@
             {% endif %}
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <form action="{% url 'cart:cart_add' item.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Добавить в корзину</button>
+</form>
 {% endblock content %}

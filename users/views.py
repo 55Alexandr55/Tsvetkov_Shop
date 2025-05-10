@@ -34,12 +34,14 @@ def user_login(request):
     return render(request, 'users/login.html', {'form': form})
 
 
+@login_required # только авторизованные пользователи могут видеть страницу профиля.
 def user_profile(request):
-    return render(request, 'user/user_profile.html')
+    user = request.user  # получаем текущего вошедшего пользователя
+    return render(request, 'user/user_profile.html',{'user':user})
 
 
 
-@login_required
+@login_required# только авторизованные пользователи могут видеть страницу
 def user_logout(request):
     logout(request)
     return redirect('users:login')
