@@ -7,14 +7,14 @@
     <h1 class="text-center mb-5">Корзина</h1>
     <div class="table-cart">
         <div class="table-head d-flex justify-content-between align-items-center">
-            <div class="left-side-head">
-                <p class="table-p">Товар</p>
+            <div class="left-side-head fs-3 ps-5">
+                <p class="table-p ">Товары</p>
             </div>
-            <div class="right-side-head d-flex gap-3">
+            <!--<div class="right-side-head d-flex gap-3">
                 <p class="table-p c-item-total">Цена</p>
                 <p class="table-p c-item-quantity">Количество</p>
                 <p class="table-p c-item-price">Всего к оплате</p>
-            </div>
+            </div> -->
         </div>
         <div class="table-items">
             {% if cart|length == 0 %}
@@ -35,18 +35,22 @@
                             </div>
                         </div>
                         <div class="right-side-items d-flex gap-3">
-                            <div class="c-item-price">
-                                грн{{ item.total_price|floatformat:2 }}
-                            </div>
+                            <!--<div class="c-item-price">-->
+                            <!--    {{ item.total_price|floatformat:2 }}грн-->
+                            <!--</div>  -->
                             <div class="c-item-quantity">
+
                                 <form action="{% url "cart:cart_update" item.item.id %}" id="update-form-{{ item.item.id }}" method="post" class="c-quantity-form">
                                     {% csrf_token %}
+                                    <div class="c-item-how">
                                     <input type="number" class="text-center" name="quantity" value="{{ item.quantity }}" min="1" required id="quantity-{{ item.item.id }}" oninput="updateCart({{ item.item.id }})">
+                                    </div>
+
                                     <a href="{% url "cart:cart_remove" item.item.id %}">Удалить товар</a>
                                 </form>
                             </div>
                             <div class="c-item-total">
-                                грн{{ item.total_price|floatformat:2 }}
+                                {{ item.total_price|floatformat:2 }}грн
                             </div>
                         </div>
                     </div>
@@ -55,7 +59,7 @@
         </div>
     </div>
     {% if cart|length > 0 %}
-        <h3 class="total_price_cart mt-5">Общая цена:(грн){{ cart.get_total_price|floatformat:2 }}</h3>
+        <h3 class="total_price_cart mt-5">Общая цена товаров:{{ cart.get_total_price|floatformat:2 }}грн</h3>
 
     {% endif %}
 

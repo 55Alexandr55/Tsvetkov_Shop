@@ -5,6 +5,7 @@
 
 {% block content %}
 <div class="register-cont d-flex flex-column align-items-center mx-auto">
+    <h1 class="text-center mb-5">Регистрация аккаунта</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
