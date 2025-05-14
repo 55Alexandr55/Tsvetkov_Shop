@@ -21,7 +21,7 @@ class Cart:
         if item_id not in self.cart:
             self.cart[item_id] = {'quantity': 0}
         if update_quantity:
-            self.cart[item_id]['quantity'] = quantity  # ✅ перезаписываем
+            self.cart[item_id]['quantity'] = quantity  # перезаписываем
         else:
             self.cart[item_id]['quantity'] += quantity  # прибавляем
         self.save()

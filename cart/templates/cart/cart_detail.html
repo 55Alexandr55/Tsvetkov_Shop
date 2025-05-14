@@ -46,7 +46,7 @@
                                     <input type="number" class="text-center" name="quantity" value="{{ item.quantity }}" min="1" required id="quantity-{{ item.item.id }}" oninput="updateCart({{ item.item.id }})">
                                     </div>
 
-                                    <a href="{% url "cart:cart_remove" item.item.id %}">Удалить товар</a>
+                                    <a href="{% url "cart:cart_remove" item.item.id %}" class="btn btn-danger mt-3">Удалить товар</a>
                                 </form>
                             </div>
                             <div class="c-item-total">
@@ -59,7 +59,11 @@
         </div>
     </div>
     {% if cart|length > 0 %}
-        <h3 class="total_price_cart mt-5">Общая цена товаров:{{ cart.get_total_price|floatformat:2 }}грн</h3>
+        <div class="d-flex justify-content-center align-items-center gap-5 mt-5">
+            <h3 class="mb-0">Общая цена товаров: {{ cart.get_total_price|floatformat:2 }} грн</h3>
+            <a href="/orders/create" class="btn btn-success">Оформить заказ</a>
+        </div>
+
 
     {% endif %}
 

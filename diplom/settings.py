@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'users',
     #корзина покупок
     'cart',
+    #Доставка Новая почта
+    'orders',
 ]
 
 MIDDLEWARE = [

@@ -12,7 +12,8 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     # каталог, страница продукта
     path('', include('main.urls', namespace='main')),
-
+    #оформление доставки
+    path('orders/', include('orders.urls', namespace='orders')),
 
 ]
 
