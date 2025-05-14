@@ -27,23 +27,33 @@
             </div>
             <navbar class="header-nav pt-4 ">
                 <ul class="header-list d-flex">
-                    <li>
-                        <a href="/" class="nav-a m-3"></a>
-                    </li>
-                    <li>
-                        <a href="/users/login/" class="nav-a1 m-3 "> Вход</a>
-                    </li>
-                    <li>
-                        <a href="/cart/" class="nav-a2 m-3"> Корзина</a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-a3 m-3"> Избранное</a>
-                    </li>
-                    <li>
-                        <a href="/users/register/" class="nav-a4 m-3"> Регистрация</a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                             <a href="/users/profile" class="nav-a1 m-3">Профиль</a>
+                        </li>
+                        <li>
+                             <a href="#" class="nav-a3 m-3"> Избранное</a>
+                        </li>
+                         <li>
+                             <a href="/cart/" class="nav-a2 m-3"> Корзина</a>
+                        </li>
 
+                    {% else %}
+                         <li>
+                             <a href="/users/login/" class="nav-a1 m-3 "> Вход</a>
+                         </li>
+                        <li>
+                            <a href="/users/register/" class="nav-a4 m-3"> Регистрация</a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-a3 m-3"> Избранное</a>
+                        </li>
+                        <li>
+                            <a href="/cart/" class="nav-a2 m-3"> Корзина</a>
+                        </li>
+                    {% endif %}
                 </ul>
+
             </navbar>
 
 
