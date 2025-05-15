@@ -20,20 +20,25 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
+
 @user_passes_test(lambda u: not u.is_authenticated)
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, email=email, password=password)
+            # form.cleaned_data['username'] == введённый email
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('main:catalog') 
+                return redirect('main:catalog')
+            else:
+                form.add_error(None, "Неверный email или пароль.")
     else:
         form = UserLoginForm()
-        
+
     return render(request, 'users/login.html', {'form': form})
 
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, \
     AuthenticationForm
 from .models import User
-
+from django import forms
 
 class UserRegistrationForm(UserCreationForm):
     class Meta:
@@ -10,6 +10,10 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserLoginForm(AuthenticationForm):
-    class Meta:
-        model = User
-        fields = ('email', 'password')
+    username = forms.EmailField(
+        label="Email",
+        widget=forms.EmailInput(attrs={'autofocus': True})
+    )
+
+
+
