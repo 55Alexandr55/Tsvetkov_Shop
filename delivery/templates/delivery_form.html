@@ -1,10 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk" x-data="deliveryApp()" x-init="init()">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Оформлення доставки</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-$END$
+<body class="p-4 bg-light">
+
+  <div class="container bg-white p-4 rounded shadow">
+    <h3 class="mb-3">Оформлення доставки Новою Поштою</h3>
+
+    <div class="mb-3">
+      <label>Ім’я та прізвище одержувача:</label>
+      <input class="form-control" x-model="form.contactRecipient">
+    </div>
+
+    <div class="mb-3">
+      <label>Телефон:</label>
+      <input class="form-control" x-model="form.recipientPhone">
+    </div>
+
+    <div class="mb-3">
+      <label>Місто:</label>
+      <select class="form-select" x-model="selectedCity" @change.debounce.500ms="if (selectedCity) loadWarehouses()">
+        <option value="">Оберіть місто</option>
+        <template x-for="city in cities" :key="city.Ref">
+            <option :value="city.Ref" x-text="city.Description"></option>
+        </template>
+</select>
+    </div>
+
+    <div class="mb-3">
+      <label>Відділення:</label>
+      <select class="form-select" x-model="form.recipientAddress">
+        <option value="">Оберіть відділення</option>
+        <template x-for="w in warehouses" :key="w.Ref">
+          <option :value="w.Ref" x-text="w.Description"></option>
+        </template>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label>Опис посилки:</label>
+      <input class="form-control" x-model="form.description">
+    </div>
+
+    <div class="mb-3">
+      <label>Оголошена вартість:</label>
+      <input class="form-control" x-model="form.cost" type="number">
+    </div>
+
+    <button class="btn btn-primary" @click="createTTN">Створити ТТН</button>
+
+    <div x-show="ttn">
+      <h5 class="mt-4">Номер ТТН: <span x-text="ttn"></span></h5>
+      <button class="btn btn-outline-success mt-2" @click="trackTTN">Перевірити статус</button>
+      <p class="mt-2" x-text="ttnStatus"></p>
+    </div>
+  </div>
+
+<script>
+function deliveryApp() {
+  return {
+    cities: [],
+    warehouses: [],
+    selectedCity: '',
+    ttn: '',
+    ttnStatus: '',
+    form: {
+      contactRecipient: '',
+      recipientPhone: '',
+      description: 'Товар',
+      cost: 100,
+      cityRecipient: '',
+      recipientAddress: '',
+      citySender: '8d5a980d-391c-11dd-90d9-001a92567626', // Київ
+      senderAddress: 'db5c88f4-391c-11dd-90d9-001a92567626',
+      contactSender: 'Магазин ГАджеты и аксесуары',
+      senderPhone: '380000000000',
+    },
+    init() {
+      fetch('/delivery/api/np/cities/')
+        .then(r => r.json())
+        .then(data => this.cities = data.data);
+    },
+    loadWarehouses() {
+      this.form.cityRecipient = this.selectedCity;
+      fetch('/delivery/api/np/warehouses/', {
+        method: 'POST',
+        body: JSON.stringify({ cityRef: this.selectedCity }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(r => r.json())
+        .then(data => this.warehouses = data.data);
+    },
+    createTTN() {
+      fetch('/delivery/api/np/create-ttn/', {
+        method: 'POST',
+        body: JSON.stringify(this.form),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(r => r.json())
+        .then(data => {
+          if (data.success && data.data[0]?.IntDocNumber) {
+            this.ttn = data.data[0].IntDocNumber;
+          } else {
+            alert('Помилка створення ТТН');
+          }
+        });
+    },
+    trackTTN() {
+      fetch('/delivery/api/np/track-ttn/', {
+        method: 'POST',
+        body: JSON.stringify({ ttn: this.ttn }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(r => r.json())
+        .then(data => {
+          this.ttnStatus = data.data[0]?.Status || 'Статус невідомий';
+        });
+    }
+  }
+}
+</script>
 </body>
 </html>

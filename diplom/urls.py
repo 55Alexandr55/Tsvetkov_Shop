@@ -13,7 +13,7 @@ urlpatterns = [
     # каталог, страница продукта
     path('', include('main.urls', namespace='main')),
     #оформление доставки
-    path('orders/', include('orders.urls', namespace='orders')),
+    path('delivery/', include('delivery.urls', namespace='delivery')),
 
 ]
 

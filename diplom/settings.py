@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     #корзина покупок
     'cart',
     #Доставка Новая почта
-    'orders',
+    'delivery'
 ]
 
 MIDDLEWARE = [
@@ -97,6 +97,28 @@ DATABASES = {
         'PORT': os.getenv('POSTGRES_PORT', 5432),
         'ATOMIC_REQUESTS': True,
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
 }
 
 
