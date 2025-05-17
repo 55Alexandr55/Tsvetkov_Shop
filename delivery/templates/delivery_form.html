@@ -7,116 +7,112 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="p-4 bg-light">
-
   <div class="container bg-white p-4 rounded shadow">
-    <h3 class="mb-3">Оформлення доставки Новою Поштою</h3>
+    <h3 class="mb-4">Оформлення доставки</h3>
 
+    <!-- Выбор способа доставки -->
     <div class="mb-3">
-      <label>Ім’я та прізвище одержувача:</label>
-      <input class="form-control" x-model="form.contactRecipient">
+      <label class="form-label">Спосіб доставки:</label>
+      <select class="form-select" x-model="deliveryMethod">
+        <option value="pickup">Самовивіз</option>
+        <option value="np">Нова Пошта</option>
+      </select>
+    </div>
+
+    <!-- Поля для всех -->
+    <div class="mb-3">
+      <label>Ім’я та прізвище:</label>
+      <input class="form-control" x-model="form.full_name">
     </div>
 
     <div class="mb-3">
       <label>Телефон:</label>
-      <input class="form-control" x-model="form.recipientPhone">
+      <input class="form-control" x-model="form.phone_number">
     </div>
 
     <div class="mb-3">
-      <label>Місто:</label>
-      <select class="form-select" x-model="selectedCity" @change.debounce.500ms="if (selectedCity) loadWarehouses()">
-        <option value="">Оберіть місто</option>
-        <template x-for="city in cities" :key="city.Ref">
-            <option :value="city.Ref" x-text="city.Description"></option>
-        </template>
-</select>
+      <label>Email:</label>
+      <input class="form-control" x-model="form.email" type="email">
     </div>
 
+    <!-- Только если выбрана доставка Новой Почтой -->
+    <template x-if="deliveryMethod === 'np'">
+      <div>
+        <div class="mb-3">
+          <label>Місто:</label>
+          <select class="form-select" x-model="selectedCity" @change="loadWarehouses">
+            <option value="">Оберіть місто</option>
+            <template x-for="city in cities" :key="city.Ref">
+              <option :value="city.Ref" x-text="city.Description"></option>
+            </template>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>Відділення:</label>
+          <select class="form-select" x-model="form.warehouse">
+            <option value="">Оберіть відділення</option>
+            <template x-for="w in warehouses" :key="w.Ref">
+              <option :value="w.Description" x-text="w.Description"></option>
+            </template>
+          </select>
+        </div>
+      </div>
+    </template>
+
+    <!-- Стоимость -->
     <div class="mb-3">
-      <label>Відділення:</label>
-      <select class="form-select" x-model="form.recipientAddress">
-        <option value="">Оберіть відділення</option>
-        <template x-for="w in warehouses" :key="w.Ref">
-          <option :value="w.Ref" x-text="w.Description"></option>
-        </template>
-      </select>
+      <label>Загальна вартість:</label>
+      <input class="form-control" type="number" x-model="form.total_price" readonly>
     </div>
 
-    <div class="mb-3">
-      <label>Опис посилки:</label>
-      <input class="form-control" x-model="form.description">
-    </div>
+    <button class="btn btn-success" @click="submitOrder">Оформити замовлення</button>
 
-    <div class="mb-3">
-      <label>Оголошена вартість:</label>
-      <input class="form-control" x-model="form.cost" type="number">
-    </div>
-
-    <button class="btn btn-primary" @click="createTTN">Створити ТТН</button>
-
-    <div x-show="ttn">
-      <h5 class="mt-4">Номер ТТН: <span x-text="ttn"></span></h5>
-      <button class="btn btn-outline-success mt-2" @click="trackTTN">Перевірити статус</button>
-      <p class="mt-2" x-text="ttnStatus"></p>
+    <div class="alert alert-success mt-3" x-show="orderSuccess">
+      Замовлення успішно створено!
     </div>
   </div>
 
 <script>
 function deliveryApp() {
   return {
+    deliveryMethod: 'np',
     cities: [],
     warehouses: [],
     selectedCity: '',
-    ttn: '',
-    ttnStatus: '',
+    orderSuccess: false,
     form: {
-      contactRecipient: '',
-      recipientPhone: '',
-      description: 'Товар',
-      cost: 100,
-      cityRecipient: '',
-      recipientAddress: '',
-      citySender: '8d5a980d-391c-11dd-90d9-001a92567626', // Київ
-      senderAddress: 'db5c88f4-391c-11dd-90d9-001a92567626',
-      contactSender: 'Магазин ГАджеты и аксесуары',
-      senderPhone: '380000000000',
+      full_name: '',
+      phone_number: '',
+      email: '',
+      warehouse: '',
+      total_price: 1000  // Пример. В реальности подставляй из корзины
     },
     init() {
-      fetch('/delivery/api/np/cities/')
-        .then(r => r.json())
+      fetch('/delivery/api/get_cities/')
+        .then(res => res.json())
         .then(data => this.cities = data.data);
     },
     loadWarehouses() {
-      this.form.cityRecipient = this.selectedCity;
-      fetch('/delivery/api/np/warehouses/', {
-        method: 'POST',
-        body: JSON.stringify({ cityRef: this.selectedCity }),
-        headers: { 'Content-Type': 'application/json' }
-      }).then(r => r.json())
+      fetch(`/delivery/api/get_warehouses/?cityRef=${this.selectedCity}`)
+        .then(res => res.json())
         .then(data => this.warehouses = data.data);
     },
-    createTTN() {
-      fetch('/delivery/api/np/create-ttn/', {
+    submitOrder() {
+      const payload = {
+        ...this.form,
+        city: this.selectedCity,
+        delivery_method: this.deliveryMethod
+      };
+      fetch('/delivery/api/submit_order/', {
         method: 'POST',
-        body: JSON.stringify(this.form),
-        headers: { 'Content-Type': 'application/json' }
-      }).then(r => r.json())
-        .then(data => {
-          if (data.success && data.data[0]?.IntDocNumber) {
-            this.ttn = data.data[0].IntDocNumber;
-          } else {
-            alert('Помилка створення ТТН');
-          }
-        });
-    },
-    trackTTN() {
-      fetch('/delivery/api/np/track-ttn/', {
-        method: 'POST',
-        body: JSON.stringify({ ttn: this.ttn }),
-        headers: { 'Content-Type': 'application/json' }
-      }).then(r => r.json())
-        .then(data => {
-          this.ttnStatus = data.data[0]?.Status || 'Статус невідомий';
-        });
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) this.orderSuccess = true;
+      });
     }
   }
 }

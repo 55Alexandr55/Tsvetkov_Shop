@@ -26,8 +26,8 @@ def get_np_cities(request):
 # Получение отделений по городу
 @csrf_exempt
 def get_np_warehouses(request):
-    data = json.loads(request.body)
-    city_ref = data.get("cityRef")
+    #data = json.loads(request.body)
+    city_ref = request.GET.get("cityRef")
     url = 'https://api.novaposhta.ua/v2.0/json/'
     payload = {
         "apiKey": API_KEY,
@@ -40,7 +40,13 @@ def get_np_warehouses(request):
     response = requests.post(url, json=payload)
     return JsonResponse(response.json())
 
-# Создание ТТН (накладной)
+# Отображение HTML формы
+def delivery_form(request):
+    return render(request, 'delivery_form.html')
+
+
+
+''' Создание ТТН (накладной) ТОПОМ
 @csrf_exempt
 def create_ttn(request):
     data = json.loads(request.body)
@@ -90,10 +96,4 @@ def track_ttn(request):
     }
     response = requests.post(url, json=payload)
     return JsonResponse(response.json())
-
-# Отображение HTML формы
-
-def delivery_form(request):
-    return render(request, 'delivery_form.html')
-
-
+'''

@@ -61,7 +61,7 @@
     {% if cart|length > 0 %}
         <div class="d-flex justify-content-center align-items-center gap-5 mt-5">
             <h3 class="mb-0">Общая цена товаров: {{ cart.get_total_price|floatformat:2 }} грн</h3>
-            <a href="/orders/create" class="btn btn-success">Оформить заказ</a>
+            <a href="/delivery/" class="btn btn-success">Оформить заказ</a>
         </div>
 
 
