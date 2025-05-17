@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk" x-data="deliveryApp()" x-init="init()">
+<html lang="uk" x-data="deliveryApp({{ total_price|safe }})" x-init="init()">
 <head>
   <meta charset="UTF-8">
   <title>Оформлення доставки</title>
@@ -74,7 +74,7 @@
   </div>
 
 <script>
-function deliveryApp() {
+function deliveryApp(totalPrice) {
   return {
     deliveryMethod: 'np',
     cities: [],
@@ -86,7 +86,7 @@ function deliveryApp() {
       phone_number: '',
       email: '',
       warehouse: '',
-      total_price: 1000  // Пример. В реальности подставляй из корзины
+      total_price: totalPrice
     },
     init() {
       fetch('/delivery/api/get_cities/')

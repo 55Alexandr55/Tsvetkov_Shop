@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
-
+from cart.cart import Cart
 
 
 API_KEY = 'c00003091e94a54b172d290a403d9cbf'
@@ -41,8 +41,15 @@ def get_np_warehouses(request):
     return JsonResponse(response.json())
 
 # Отображение HTML формы
+# Отображение HTML формы
 def delivery_form(request):
-    return render(request, 'delivery_form.html')
+    cart = Cart(request)  # получаем корзину
+    total_price = cart.get_total_price()  # итоговая сумма
+
+    return render(request, 'delivery_form.html', {
+        'total_price': round(total_price, 2)  # передаём в шаблон
+    })
+
 
 
 

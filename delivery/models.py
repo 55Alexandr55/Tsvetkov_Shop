@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from django.db import models
+from cart.cart import Cart
 
 class Order(models.Model):
     id_delivery = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
