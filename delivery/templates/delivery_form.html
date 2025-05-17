@@ -24,18 +24,22 @@
 
     <!-- Поля для всех -->
     <div class="mb-3">
-      <label>Ім’я та прізвище:</label>
-      <input class="form-control" x-model="form.full_name">
+        <label>Ім’я та прізвище:</label>
+        <input class="form-control" x-model="form.full_name">
+        <div class="text-danger" x-text="errors.full_name" x-show="errors.full_name"></div>
+
     </div>
 
     <div class="mb-3">
-      <label>Телефон:</label>
-      <input class="form-control" x-model="form.phone_number">
+        <label>Телефон:</label>
+        <input class="form-control" x-model="form.phone_number">
+        <div class="text-danger" x-text="errors.phone_number" x-show="errors.phone_number"></div>
     </div>
 
     <div class="mb-3">
       <label>Email:</label>
       <input class="form-control" x-model="form.email" type="email">
+      <div class="text-danger" x-text="errors.email" x-show="errors.email"></div>
     </div>
 
     <!-- Только если выбрана доставка Новой Почтой -->
@@ -47,6 +51,7 @@
             <option value="">Оберіть місто</option>
             <template x-for="city in cities" :key="city.Ref">
               <option :value="city.Ref" x-text="city.Description"></option>
+                <div class="text-danger" x-text="errors.city" x-show="errors.city"></div>
             </template>
           </select>
         </div>
@@ -57,6 +62,7 @@
             <option value="">Оберіть відділення</option>
             <template x-for="w in warehouses" :key="w.Ref">
               <option :value="w.Description" x-text="w.Description"></option>
+                <div class="text-danger" x-text="errors.warehouse" x-show="errors.warehouse"></div>
             </template>
           </select>
         </div>
@@ -78,59 +84,83 @@
 
 <script>
 function deliveryApp(totalPrice) {
-    return {
-        deliveryMethod: 'np',
-        cities: [],
-        warehouses: [],
-        selectedCity: '',
-        orderSuccess: false,
-        form: {
-            full_name: '',
-            phone_number: '',
-            email: '',
-            warehouse: '',
-            total_price: totalPrice
-        },
-        init() {
-            fetch('/delivery/api/get_cities/')
-                .then(res => res.json())
-                .then(data => this.cities = data.data);
-        },
-        loadWarehouses() {
-            fetch(`/delivery/api/get_warehouses/?cityRef=${this.selectedCity}`)
-                .then(res => res.json())
-                .then(data => this.warehouses = data.data);
-        },
-        submitOrder: function () {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  return {
+    deliveryMethod: 'np',
+    cities: [],
+    warehouses: [],
+    selectedCity: '',
+    orderSuccess: false,
+    errors: {},
+    form: {
+      full_name: '',
+      phone_number: '+380',
+      email: '@gmail.com',
+      warehouse: '',
+      total_price: totalPrice
+    },
+    init() {
+      fetch('/delivery/api/get_cities/')
+        .then(res => res.json())
+        .then(data => this.cities = data.data);
+    },
+    loadWarehouses() {
+      fetch(`/delivery/api/get_warehouses/?cityRef=${this.selectedCity}`)
+        .then(res => res.json())
+        .then(data => this.warehouses = data.data);
+    },
+    validateForm() {
+      this.errors = {};
+      const nameRegex = /^[А-Яа-яІіЇїЄєҐґ\s'-]{2,}$/u;
+      const phoneRegex = /^\+380\d{9}$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
-            const payload = {
-                ...this.form,
-                city: this.selectedCity,
-                delivery_method: this.deliveryMethod
-            };
-            fetch('/delivery/api/submit_order/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', 'X-CSRFToken': csrfToken
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify(payload)
-            })
-                .then(res => {
-                    if (!res.ok) throw new Error('Щось пішло не так');
-                    return res.json();
-                })
-                .then(data => {
-                    if (data.success) this.orderSuccess = true;
-                })
-                .catch(error => {
-                    console.error('Помилка при відправці замовлення:', error);
-                });
-        }
+      if (!nameRegex.test(this.form.full_name))
+        this.errors.full_name = 'Введіть коректне ім’я (укр/рус)';
+      if (!phoneRegex.test(this.form.phone_number))
+        this.errors.phone_number = 'Телефон має бути у форматі +380XXXXXXXXX';
+      if (!emailRegex.test(this.form.email))
+        this.errors.email = 'Невірний формат email';
+      if (this.deliveryMethod === 'np' && !this.selectedCity)
+        this.errors.city = 'Оберіть місто';
+      if (this.deliveryMethod === 'np' && !this.form.warehouse)
+        this.errors.warehouse = 'Оберіть відділення';
+
+      return Object.keys(this.errors).length === 0;
+    },
+    submitOrder() {
+      if (!this.validateForm()) return;
+
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      const payload = {
+        ...this.form,
+        city: this.selectedCity,
+        delivery_method: this.deliveryMethod
+      };
+
+      fetch('/delivery/api/submit_order/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Щось пішло не так');
+        return res.json();
+      })
+      .then(data => {
+        if (data.success) this.orderSuccess = true;
+      })
+      .catch(error => {
+        console.error('Помилка при відправці замовлення:', error);
+      });
     }
+  }
 }
+
 </script>
 </body>
 </html>

@@ -40,7 +40,7 @@ def get_np_warehouses(request):
     response = requests.post(url, json=payload)
     return JsonResponse(response.json())
 
-# Отображение HTML формы
+
 # Отображение HTML формы
 def delivery_form(request):
     cart = Cart(request)  # получаем корзину
@@ -82,7 +82,7 @@ def submit_order(request):
 def get_city_description(ref):
     url = 'https://api.novaposhta.ua/v2.0/json/'
     payload = {
-        "apiKey": "ВАШ_API_КЛЮЧ",
+        "apiKey": "API_KEY",
         "modelName": "Address",
         "calledMethod": "getCities",
         "methodProperties": {"Ref": ref}
