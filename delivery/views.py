@@ -1,11 +1,11 @@
-
 import requests
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 from cart.cart import Cart
-
+from django.http import JsonResponse
+from .models import Order
 
 API_KEY = 'c00003091e94a54b172d290a403d9cbf'
 
@@ -53,54 +53,42 @@ def delivery_form(request):
 
 
 
-''' Создание ТТН (накладной) ТОПОМ
-@csrf_exempt
-def create_ttn(request):
+def submit_order(request):
+    import json
     data = json.loads(request.body)
-    url = 'https://api.novaposhta.ua/v2.0/json/'
-    payload = {
-        "apiKey": API_KEY,
-        "modelName": "InternetDocument",
-        "calledMethod": "save",
-        "methodProperties": {
-            "PayerType": "Sender",
-            "PaymentMethod": "Cash",
-            "CargoType": "Parcel",
-            "VolumeGeneral": "0.1",
-            "Weight": "1",
-            "ServiceType": "WarehouseWarehouse",
-            "SeatsAmount": "1",
-            "Description": data.get("description"),
-            "Cost": data.get("cost"),
-            "CitySender": data.get("citySender"),
-            "SenderAddress": data.get("senderAddress"),
-            "ContactSender": data.get("contactSender"),
-            "SendersPhone": data.get("senderPhone"),
-            "CityRecipient": data.get("cityRecipient"),
-            "RecipientAddress": data.get("recipientAddress"),
-            "ContactRecipient": data.get("contactRecipient"),
-            "RecipientsPhone": data.get("recipientPhone")
-        }
-    }
-    response = requests.post(url, json=payload)
-    return JsonResponse(response.json())
 
-# Отслеживание статуса посылки
-@csrf_exempt
-def track_ttn(request):
-    data = json.loads(request.body)
-    ttn = data.get("ttn")
+    city_ref = data.get('city')
+    city_description = ''
+    warehouse_description = data.get('warehouse', '')
+
+    # Если доставка Новой Поштой — получаем название города
+    if data.get('delivery_method') == 'np' and city_ref:
+        # Опционально можно кэшировать, чтобы не делать много запросов
+        city_description = get_city_description(city_ref)
+
+    order = Order.objects.create(
+        full_name=data['full_name'],
+        phone_number=data['phone_number'],
+        email=data['email'],
+        delivery_method=data['delivery_method'],
+        city_ref=city_ref,
+        city_description=city_description,
+        warehouse_description=warehouse_description,
+        total_price=data['total_price']
+    )
+    return JsonResponse({'success': True})
+
+
+def get_city_description(ref):
     url = 'https://api.novaposhta.ua/v2.0/json/'
     payload = {
-        "apiKey": API_KEY,
-        "modelName": "TrackingDocument",
-        "calledMethod": "getStatusDocuments",
-        "methodProperties": {
-            "Documents": [
-                {"DocumentNumber": ttn}
-            ]
-        }
+        "apiKey": "ВАШ_API_КЛЮЧ",
+        "modelName": "Address",
+        "calledMethod": "getCities",
+        "methodProperties": {"Ref": ref}
     }
     response = requests.post(url, json=payload)
-    return JsonResponse(response.json())
-'''
+    data = response.json()
+    if data['success'] and data['data']:
+        return data['data'][0]['Description']
+    return ''
