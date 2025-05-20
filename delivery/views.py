@@ -6,8 +6,15 @@ import json
 from cart.cart import Cart
 from django.http import JsonResponse
 from .models import Order
+from dotenv import load_dotenv
+import os
 
-API_KEY = 'c00003091e94a54b172d290a403d9cbf'
+
+
+# загружаем .env
+load_dotenv()
+
+API_KEY = os.getenv("API_NOVAPOSHTA")
 
 # Получение городов
 @csrf_exempt
