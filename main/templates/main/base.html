@@ -19,47 +19,58 @@
 </head>
 <body>
     <header class="header sticky-top">
-        <div class="header-container d-flex justify-content-center">
-            <div class="header-logo ">
-                <a href="/"><img src="{% static 'images/logosite.png' %}" alt="Логотип" class="site-logo"></a>
-                <!-- <img src="{% static 'images/logosite.png' %}" alt="Логотип" class="site-logo">
--->
-            </div>
-            <navbar class="header-nav pt-4 ">
-                <ul class="header-list d-flex">
-                    {% if user.is_authenticated %}
-                        <li>
-                             <a href="/users/profile" class="nav-a1 m-3">Профиль</a>
-                        </li>
-                        <li>
-                             <a href="#" class="nav-a3 m-3"> Избранное</a>
-                        </li>
-                         <li>
-                             <a href="/cart/" class="nav-a2 m-3"> Корзина</a>
-                        </li>
+    <div class="header-container d-flex align-items-center justify-content-between flex-wrap px-3">
 
-                    {% else %}
-                         <li>
-                             <a href="/users/login/" class="nav-a1 m-3 "> Вход</a>
-                         </li>
-                        <li>
-                            <a href="/users/register/" class="nav-a4 m-3"> Регистрация</a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-a3 m-3"> Избранное</a>
-                        </li>
-                        <li>
-                            <a href="/cart/" class="nav-a2 m-3"> Корзина</a>
-                        </li>
-                    {% endif %}
-                </ul>
-
-            </navbar>
-
-
+        <!-- Логотип -->
+        <div class="logo">
+            <a href="/"><img src="{% static 'images/logosite.png' %}" alt="Логотип" class="site-logo"></a>
         </div>
 
-    </header>
+        <!-- Поиск -->
+        <div class="search flex-grow-1 mx-3" style="max-width: 500px;">
+            <form action="/search/" method="get" x-data="autocomplete()" class="position-relative">
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Поиск товаров..."
+                    name="q"
+                    x-model="query"
+                    @input.debounce.300ms="fetchSuggestions"
+                    @focus="show = true"
+                    @click.away="show = false"
+                >
+
+                <ul class="list-group position-absolute w-100 z-3 mt-1"
+                     x-show="show && results.length"
+                     style="max-height: 200px; overflow-y: auto;">
+                    <template x-for="item in results" :key="item.id">
+                        <li
+                            class="list-group-item list-group-item-action"
+                            x-text="item.name"
+                            @click.prevent="selectItem(item)"
+                        ></li>
+                    </template>
+                </ul>
+            </form>
+        </div>
+
+        <!-- Навигация -->
+        <navbar class="header-nav">
+            <ul class="header-list d-flex flex-wrap gap-4 m-0 p-0">
+                {% if user.is_authenticated %}
+                    <li><a href="/users/profile" class="nav-a1">Профиль</a></li>
+                    <li><a href="#" class="nav-a3">Избранное</a></li>
+                    <li><a href="/cart/" class="nav-a2">Корзина</a></li>
+                {% else %}
+                    <li><a href="/users/login/" class="nav-a1">Вход</a></li>
+                    <li><a href="/users/register/" class="nav-a4">Регистрация</a></li>
+                    <li><a href="#" class="nav-a3">Избранное</a></li>
+                    <li><a href="/cart/" class="nav-a2">Корзина</a></li>
+                {% endif %}
+            </ul>
+        </navbar>
+    </div>
+</header>
 
 
     <div class="container">
@@ -68,6 +79,8 @@
 
     {% comment %} js for boorstrap {% endcomment %}
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+
 
     <script>
         {% comment %} скрипт для фильтрации {% endcomment %}
@@ -92,6 +105,42 @@
                 form.submit(); 
             }, 1000); 
         }
-    </script>
+
+
+
+
+        <!-- Автопродолжение ввода пользователя для поиска -->
+function autocomplete() {
+    return {
+        query: '',
+        results: [],
+        show: false,
+
+        fetchSuggestions() {
+            if (this.query.length < 2) {
+                this.results = [];
+                return;
+            }
+
+            fetch(`/autocomplete/?q=${encodeURIComponent(this.query)}`, {
+                headers: { 'x-requested-with': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.results = data.results;
+            });
+        },
+
+        selectItem(item) {
+            this.query = item.name;
+            this.show = false;
+            setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 100);
+        }
+    }
+}
+</script>
+
 </body>
 </html>

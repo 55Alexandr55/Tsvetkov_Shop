@@ -1,6 +1,8 @@
 from django.views.generic import ListView, DetailView
 from .models import Item, Category
 from django.db.models import Q
+from django.shortcuts import render
+from django.http import JsonResponse
 
 
 class CatalogView(ListView):
@@ -62,3 +64,19 @@ class ItemDetailView(DetailView):
 
 
 
+def item_search(request):
+    query = request.GET.get('q', '')
+    items = Item.objects.filter(name__icontains=query) if query else []
+    return render(request, 'main/product/search_results.html', {  "Путь от Темплейтс надо указывать"
+        'products': items,
+        'query': query
+    })
+
+def item_autocomplete(request):
+    query = request.GET.get('q', '')
+    if query:
+        items = Item.objects.filter(name__icontains=query)[:10]
+        data = list(items.values('id', 'name'))
+    else:
+        data = []
+    return JsonResponse({'results': data})
