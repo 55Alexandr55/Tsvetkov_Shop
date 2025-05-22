@@ -264,6 +264,12 @@ header {
     justify-content: center;
 
 }
+
+.col-md-6.d-flex.flex-column > p {
+    width: 100%;
+}
+
+
 .btv-p{
     position: absolute;
     margin-bottom: 6px;

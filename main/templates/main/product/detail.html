@@ -1,72 +1,119 @@
-from .models import Item, Category
-
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}
-    {{ item.name }}
-{% endblock title %}
+{% block title %}{{ item.name }}{% endblock title %}
+
 <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
 {% block content %}
-    <div class="detail-product d-flex">
-        <div class="detail-img">
-            {% for image in item.images.all %}
-                <img class="detail-image" src="{{ image.image.url }}" alt="{{ item.name }}" style="display: none;" data-index="{{ forloop.counter0 }}">
-            {% endfor %}
-            <div class="image-nav">
-                <button class="prev-btn">
-                    <span class="btv-p"><</span>
-                </button>
-                <button class="next-btn">
-                    <span class="btv-n">></span>
-                </button>
-            </div>
-        </div>
-        <script>
-            const images = document.querySelectorAll('.detail-image');
-            const prevBtn = document.querySelector('.prev-btn');
-            const nextBtn = document.querySelector('.next-btn');
-            let currentIndex = 0;
+    <div class="container my-4" x-data="productDetail()">
+        <div class="row">
+            <!-- Изображения -->
+            <div class="col-md-6">
+                <div class="position-relative">
+                    <template x-for="(image, index) in images" :key="index">
+                        <img
+                                :src="image"
+                                alt="{{ item.name }}"
+                                class="img-fluid"
+                                x-show="currentIndex === index"
+                                style="max-height: 500px; width: 100%; object-fit: contain;"
+                        >
+                    </template>
 
-            images[currentIndex].style.display = 'block';
+                    <!-- Кнопки навигации -->
+                    <button
+                            class="btn btn-outline-secondary position-absolute top-50 start-0 translate-middle-y"
+                            @click="prev"
+                            style="z-index: 10;"
+                            :disabled="images.length <= 1"
+                    >&lt;
+                    </button>
 
-            if (images.length === 1) {
-                prevBtn.style.display = 'none';
-                nextBtn.style.display = 'none';
-            } else {
-                prevBtn.addEventListener('click', () => {
-                    images[currentIndex].style.display = 'none';
-                    currentIndex = (currentIndex - 1 + images.length) % images.length;
-                    images[currentIndex].style.display = 'block';
-                });
-
-                nextBtn.addEventListener('click', () => {
-                    images[currentIndex].style.display = 'none';
-                    currentIndex = (currentIndex + 1) % images.length;
-                    images[currentIndex].style.display = 'block';
-                });
-            }
-        </script>
-
-        <div class="detail-description">
-            <h2>{{ item.name }}</h2>
-            <h3>Категория: {{ item.category.name }}</h3>
-            <p>Описание: {{ item.description|linebreaks }}</p>
-
-            {% if item.discount %}
-                <div class="cart-discount d-flex gap-2">
-                    <p class="line">грн{{ item.price }}</p>
-                    <p class="price">грн{{ item.get_price_with_discount }}</p>
+                    <button
+                            class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y"
+                            @click="next"
+                            style="z-index: 10;"
+                            :disabled="images.length <= 1"
+                    >&gt;
+                    </button>
                 </div>
-            {% else %}
-                <p class="price">грн{{ item.price }}</p>
-            {% endif %}
+
+                <!-- Миниатюрніе фотки -->
+                <div class="d-flex justify-content-center mt-3 gap-2">
+                    <template x-for="(image, index) in images" :key="index">
+                        <img
+                                :src="image"
+                                alt="thumb"
+                                class="img-thumbnail"
+                                :class="{'border-primary': currentIndex === index}"
+                                style="width: 40px; height: 40px; cursor: pointer;"
+                                @click="currentIndex = index"
+                        >
+                    </template>
+                </div>
+            </div>
+
+            <!-- Описание и детали -->
+            <div class="col-md-6 d-flex flex-column">
+                <h4>{{ item.name }}</h4>
+                <h5 class="text-muted">Категория: {{ item.category.name }}</h5>
+
+
+                    <div class="mt-3 d-flex flex-column">
+                        {% if item.discount %}
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-decoration-line-through text-muted fs-5">{{ item.price }} грн</span>
+                                <span class="badge bg-danger w-auto">-{{ item.discount }}%</span>
+                            </div>
+                            <div>
+                                <span class="fs-3 text-danger">{{ item.get_price_with_discount }} грн</span>
+                            </div>
+                        {% else %}
+                            <div class="fs-3">{{ item.price }} грн</div>
+                        {% endif %}
+                    </div>
+
+            
+
+                <p class="mt-3 ">{{ item.description|linebreaks }}</p>
+
+                <form action="{% url 'cart:cart_add' item.id %}" method="post" >
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success mt-3">Добавить в корзину</button>
+                </form>
+
+                <template x-if="addedToCart">
+                    <div class="alert alert-success mt-3" role="alert">
+                        Товар добавлен в корзину!
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
 
-    <!--ДОБАВЛЕНИЕ В КОРЗИНУ -->
-    <form action="{% url 'cart:cart_add' item.id %}" method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-success mt-3">Добавить в корзину</button>
-</form>
+    <script>
+        function productDetail() {
+            return {
+                currentIndex: 0,
+                images: [
+                    {% for image in item.images.all %}
+                        '{{ image.image.url }}'{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                ],
+                addedToCart: false,
+                prev() {
+                    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+                },
+                next() {
+                    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                },
+                addToCart() {
+                    this.addedToCart = true;
+                    setTimeout(() => this.addedToCart = false, 3000);
+                    $el.querySelector('form').submit();
+                }
+            }
+        }
+    </script>
 {% endblock content %}
