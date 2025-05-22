@@ -8,7 +8,7 @@
     <div class="catalog d-flex">
         <form method="get" action="{% url 'main:catalog' %}" class="sidebar" id="filter-form">
 
-            <h4 class="price-head">Цена,грн:</h4>
+            <h4 class="price-head">Цена, грн:</h4>
             <div class="price-range">
                 <input type="number" name="min_price" id="min_price" placeholder="от" value="{{ request.GET.min_price }}" oninput="debounceApplyFilters()">
                 <input type="number" name="max_price" id="max_price" placeholder="до" value="{{ request.GET.max_price }}" oninput="debounceApplyFilters()">
@@ -27,10 +27,10 @@
 
         </form>
     
-        <div class="product-list ">
-            <div class="card-container d-flex flex-wrap justify-content-center">
+        <div class="product-list">
+            <div class="card-container d-flex flex-wrap justify-content-center ">
                 {% for item in items %}
-                    <div class="card">
+                    <div class="card ">
                         <a href="{% url 'main:item_detail' item.slug %}">
                             {% if item.image %}
                                 <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">

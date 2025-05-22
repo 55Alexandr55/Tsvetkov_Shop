@@ -54,6 +54,34 @@
             </form>
         </div>
 
+
+        <ul class="list-group position-absolute w-100 z-3 mt-1"
+    x-show="show && results.length"
+    style="max-height: 250px; overflow-y: auto;">
+
+    <!-- Заголовок "История поиска" -->
+    <template x-if="!query.length">
+        <li class="list-group-item active text-white bg-secondary small">
+            История поиска:
+        </li>
+    </template>
+
+    <template x-for="item in results" :key="item.id || item">
+        <li
+            class="list-group-item list-group-item-action"
+            x-text="item.name || item"
+            @click.prevent="selectItem(item)"
+        ></li>
+    </template>
+</ul>
+
+
+
+
+
+
+
+
         <!-- Навигация -->
         <navbar class="header-nav">
             <ul class="header-list d-flex flex-wrap gap-4 m-0 p-0">
@@ -81,13 +109,12 @@
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 
-
-    <script>
+ <script>
         {% comment %} скрипт для фильтрации {% endcomment %}
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.category-option input[type="checkbox"]');
             const form = document.getElementById('filter-form');
-    
+
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     form.submit();
@@ -95,15 +122,15 @@
             });
         });
 
-        {% comment %} автоматически применяет заданный ценовой 
+        {% comment %} автоматически применяет заданный ценовой
         диапазон по истечении 1 секунды {% endcomment %}
         let timeout;
         function debounceApplyFilters() {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
                 const form = document.getElementById('filter-form');
-                form.submit(); 
-            }, 1000); 
+                form.submit();
+            }, 1000);
         }
 
 

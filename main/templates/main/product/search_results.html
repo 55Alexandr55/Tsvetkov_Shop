@@ -1,34 +1,76 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}
-    {{ item.name }}
-{% endblock title %}
-<link rel="stylesheet" href="{% static 'css/main.css' %}">
-{% block content %}
-<h2>Результаты поиска по "{{ query }}"</h2>
+{% block title %}Результаты поиска{% endblock title %}
 
-{% if products %}
-    <div class="row">
-        {% for product in products %}
-            <div class="col-md-4">
-                <div class="card mb-3">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
-                        <p class="card-text"><strong>{{ product.price }} ₴</strong></p>
-                    </div>
-                </div>
+{% block content %}
+<div class="catalog d-flex">
+    <!-- Сайдбар фильтhf -->
+    <form method="get" action="{% url 'main:item_search' %}" class="sidebar" id="filter-form">
+
+        <input type="hidden" name="q" value="{{ query }}">
+
+        <h4 class="price-head">Цена, грн:</h4>
+        <div class="price-range">
+            <input type="number" name="min_price" id="min_price" placeholder="от"
+                   value="{{ request.GET.min_price }}" oninput="debounceApplyFilters()">
+            <input type="number" name="max_price" id="max_price" placeholder="до"
+                   value="{{ request.GET.max_price }}" oninput="debounceApplyFilters()">
+        </div>
+
+        <h4 class="category-head">Категории:</h4>
+        {% for category in categories %}
+            <div class="category-option d-flex gap-2">
+                <input type="checkbox" name="category" id="category-{{ category.slug }}" value="{{ category.slug }}"
+                       {% if category.slug in selected_categories %}checked{% endif %} onchange="applyFilters()">
+                <label for="category-{{ category.slug }}" class="d-flex">
+                    <div class="category-name">{{ category.name }}</div>
+                    <div class="category-len">({{ category.get_item_count }})</div>
+                </label>
             </div>
         {% endfor %}
+    </form>
+
+    <!-- Результаты поиска -->
+    <div class="product-list">
+        <h2 class="mb-3 ms-4">Результаты поиска по запросу"{{ query }}"</h2>
+
+        <div class="card-container d-flex flex-wrap ms-4">
+            {% if products %}
+                {% for item in products %}
+                    <div class="card">
+                        <a href="{% url 'main:item_detail' item.slug %}">
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">
+                            {% endif %}
+                            <div class="card-info">
+                                <h4>{{ item.name|truncatechars:53 }}</h4>
+                                <p class="price">{{ item.get_price_with_discount|default:item.price|floatformat:0 }} грн</p>
+                            </div>
+                        </a>
+                        <div class="cartc">
+                            <form action="{% url 'cart:cart_add' item.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-cart1" aria-label="Добавить в корзину">
+                                    <img src="{% static 'images/cart.png' %}" alt="Корзина"/>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Ничего не найдено.</p>
+            {% endif %}
+        </div>
     </div>
-{% else %}
-    <p>Ничего не найдено.</p>
-{% endif %}
-
-
-
+</div>
 {% endblock content %}
+
+
+
+
+
+
+
+
+

@@ -67,9 +67,15 @@ class ItemDetailView(DetailView):
 def item_search(request):
     query = request.GET.get('q', '')
     items = Item.objects.filter(name__icontains=query) if query else []
-    return render(request, 'main/product/search_results.html', {  "Путь от Темплейтс надо указывать"
+
+    categories = Category.objects.all()
+    selected_categories = request.GET.getlist('category')
+
+    return render(request, 'main/product/search_results.html', {
         'products': items,
-        'query': query
+        'query': query,
+        'categories': categories,
+        'selected_categories': selected_categories,
     })
 
 def item_autocomplete(request):
