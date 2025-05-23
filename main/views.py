@@ -3,7 +3,8 @@ from .models import Item, Category
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import JsonResponse
-
+from .forms import ReviewForm
+from django.shortcuts import redirect
 
 class CatalogView(ListView):
     '''
@@ -56,14 +57,34 @@ class ItemDetailView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         item = self.object
+        context['form'] = ReviewForm()
+        context['reviews'] = item.reviews.order_by('-created_at')
         return context
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.item = self.object
+            review.save()
+            return redirect(self.request.path_info)
+        context = self.get_context_data()
+        context['form'] = form
+        return self.render_to_response(context)
 
 
+
+
+
+
+
+
+
+#Поиск товаров по запросу
 def item_search(request):
     query = request.GET.get('q', '')
     items = Item.objects.filter(name__icontains=query) if query else []
