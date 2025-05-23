@@ -239,6 +239,47 @@ header {
     text-decoration: none !important;
 }
 
+.price-block {
+  font-size: 0.85rem;
+  padding-left: 5px;
+}
+
+.old-price-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #6c757d; /* серый */
+  font-size: 0.75rem;
+}
+
+.discount-badge {
+  background-color: #dc3545; /* красный */
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+}
+
+/* НОВАЯ ЦЕНА */
+.new-price {
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding-left: 2px;
+  margin-top: -4px; /* чуть выше */
+  color: black; /* по умолчанию — черный */
+}
+
+/* Если есть скидка, перекрашиваем в красный */
+.price-block .old-price-row + .new-price {
+  color: #dc3545;
+}
+
+
+
 /* СТИЛИ ДЛЯ DETAIL HTML--------------------------------------------------------------------------------------------------*/
 
 .detail-image {
