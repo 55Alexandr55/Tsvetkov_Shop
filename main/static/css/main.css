@@ -17,6 +17,7 @@ auto = автоматический отступ
  */
 
 html, body {
+    padding-top: 70px;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -52,6 +53,14 @@ body1 {
 header {
     margin-bottom: 40px;
     background: #2b2f32;
+
+}
+
+header.header {
+    position: sticky;
+    top: 0;
+    z-index: 99999;
+
 }
 
 
