@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .forms import ReviewForm
 from django.shortcuts import redirect
-from django.db.models import Avg
+
 
 
 class CatalogView(ListView):
@@ -47,10 +47,8 @@ class CatalogView(ListView):
         context['max_price'] = self.request.GET.get('max_price', '')
         return context
 
-    # Средняя оценка для товара от пользователей по отзывам
-    def get_average_rating(self):
-        avg = self.reviews.aggregate(Avg('rating'))['rating__avg']
-        return round(avg, 1) if avg else 0
+
+
 
 
 # страница товара

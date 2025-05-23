@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.db.models import Avg
 
 class Category(models.Model):
     # категории товаров
@@ -35,8 +35,10 @@ class Item(models.Model):
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     description = models.TextField(blank=True)
 
-
-
+    # Средняя оценка для товара от пользователей по отзывам
+    def get_average_rating(self):
+        avg = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg, 1) if avg else 0
 
     def __str__(self):
         return self.name

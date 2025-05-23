@@ -42,8 +42,8 @@
                             <div class="card-info">
                                 <h4 class="item-name-h4">{{ item.name|truncatechars:53 }}</h4>
 
-
-                                <div class="rating mt-3  ms-2" style="font-size: 0.85rem; line-height: 1;">
+                                 <!--РЕЙТИНГ ДЛЯ ТОВАРА В ЗВЕЗДОЧКАХ -->
+                                <div class="rating mt-2  ms-2" style="font-size: 1.1; line-height: 1;">
                                     {% with avg=item.get_average_rating %}
                                         {% for i in "12345" %}
                                             {% if avg >= forloop.counter %}
