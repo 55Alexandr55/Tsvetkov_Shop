@@ -172,6 +172,16 @@ header.header {
 
 }
 
+.item-name-h4 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  font-size: 1.1rem; /* при необходимости */
+}
+
+
+
+
 .price-head h4{
   width: 10px;
   height: 10px;
@@ -213,6 +223,14 @@ header.header {
 
 }
 
+.item-image-cont {
+    height: 195px;
+
+
+}
+
+
+
 .product-image {
 
     width: 190px;
@@ -229,7 +247,8 @@ header.header {
 }
 
 .card-info h4{
-    height: 50px;
+    height: 30px;
+    padding-top: -10px;
     padding-left: 5px;
     color: #121212;
     font-size: 12px;
@@ -250,7 +269,8 @@ header.header {
 
 .price-block {
   font-size: 0.85rem;
-  padding-left: 5px;
+  padding-left: 10px;
+    padding-top: 12px;
 }
 
 .old-price-row {
@@ -277,16 +297,30 @@ header.header {
 .new-price {
   font-weight: 600;
   font-size: 0.95rem;
-  padding-left: 2px;
+  padding-left: 5px;
   margin-top: -4px; /* чуть выше */
   color: black; /* по умолчанию — черный */
 }
 
-/* Если есть скидка, перекрашиваем в красный */
-.price-block .old-price-row + .new-price {
-  color: #dc3545;
+.new-price1 {
+    margin-top: 7px;
+font-weight: 600;
+  font-size: 0.95rem;
+  padding-left: 5px;
+
+  color: black;
+
+}
+.price-block {
+    margin-top: 0px;
+
 }
 
+
+/* Если есть скидка, перекрашиваем в красный */
+.price-block .old-price-row + .new-price {
+    color: #dc3545;
+}
 
 
 /* СТИЛИ ДЛЯ DETAIL HTML--------------------------------------------------------------------------------------------------*/
@@ -344,6 +378,17 @@ header.header {
     margin-bottom: 6px;
     margin-left: 4px;
 }
+
+.img-fluid {
+    height: 370px;
+
+
+}
+
+
+
+
+
 /* СТИЛИ ДЛЯ REGISTER HTML--------------------------------------------------------------------------------------------------*/
 
 .errorlist {

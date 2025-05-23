@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .forms import ReviewForm
 from django.shortcuts import redirect
+from django.db.models import Avg
+
 
 class CatalogView(ListView):
     '''
@@ -17,8 +19,7 @@ class CatalogView(ListView):
     # указываем расположение шаблона
     template_name = 'main/product/catalog.html'
     context_object_name = 'items'
-    
-    
+
     # собираем сортировки
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -29,7 +30,6 @@ class CatalogView(ListView):
         if category_slugs:
             queryset = queryset.filter(category__slug__in=category_slugs)
 
-
         if min_price:
             queryset = queryset.filter(price__gte=min_price)
 
@@ -37,7 +37,6 @@ class CatalogView(ListView):
             queryset = queryset.filter(price__lte=max_price)
 
         return queryset
-
 
     # передаем контекст
     def get_context_data(self, **kwargs):
@@ -47,7 +46,12 @@ class CatalogView(ListView):
         context['min_price'] = self.request.GET.get('min_price', '')
         context['max_price'] = self.request.GET.get('max_price', '')
         return context
-    
+
+    # Средняя оценка для товара от пользователей по отзывам
+    def get_average_rating(self):
+        avg = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg, 1) if avg else 0
+
 
 # страница товара
 class ItemDetailView(DetailView):
@@ -77,14 +81,7 @@ class ItemDetailView(DetailView):
         return self.render_to_response(context)
 
 
-
-
-
-
-
-
-
-#Поиск товаров по запросу
+# Поиск товаров по запросу
 def item_search(request):
     query = request.GET.get('q', '')
     items = Item.objects.filter(name__icontains=query) if query else []
@@ -98,6 +95,7 @@ def item_search(request):
         'categories': categories,
         'selected_categories': selected_categories,
     })
+
 
 def item_autocomplete(request):
     query = request.GET.get('q', '')

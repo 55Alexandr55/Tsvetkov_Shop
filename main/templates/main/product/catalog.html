@@ -35,10 +35,28 @@
                     <div class="card ">
                         <a href="{% url 'main:item_detail' item.slug %}">
                             {% if item.image %}
+                                <div class=" item-image-cont">
                                 <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">
+                                </div>
                             {% endif %}
                             <div class="card-info">
-                                <h4>{{ item.name|truncatechars:53 }}</h4>
+                                <h4 class="item-name-h4">{{ item.name|truncatechars:53 }}</h4>
+
+
+                                <div class="rating mt-3  ms-2" style="font-size: 0.85rem; line-height: 1;">
+                                    {% with avg=item.get_average_rating %}
+                                        {% for i in "12345" %}
+                                            {% if avg >= forloop.counter %}
+                                                <span class="text-warning">&#9733;</span>
+                                            {% else %}
+                                                <span class="text-muted">&#9733;</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span class="small text-muted ms-1">({{ avg }})</span>
+                                    {% endwith %}
+                                </div>
+
+
                                 <div class="price-block">
                                     {% if item.discount %}
                                         <div class="old-price-row">
@@ -48,7 +66,7 @@
                                         <div class="new-price">{{ item.get_price_with_discount|floatformat:0 }} грн
                                         </div>
                                     {% else %}
-                                        <div class="new-price">{{ item.price|floatformat:0 }} грн</div>
+                                        <div class="new-price1">{{ item.price|floatformat:0 }} грн</div>
                                     {% endif %}
                                 </div>
 
