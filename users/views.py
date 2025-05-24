@@ -13,10 +13,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/')
+            return render(request, 'users/register.html', {'form': form, 'show_success': True})
     else:
         form = UserRegistrationForm()
-        
+
     return render(request, 'users/register.html', {'form': form})
 
 
@@ -40,6 +40,8 @@ def user_login(request):
         form = UserLoginForm()
 
     return render(request, 'users/login.html', {'form': form})
+
+
 
 
 @login_required # только авторизованные пользователи могут видеть страницу профиля.
