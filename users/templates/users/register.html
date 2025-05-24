@@ -1,16 +1,16 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}Регистрация{% endblock title %}
+{% block title %}Реєстрація{% endblock title %}
 
 {% block content %}
 <div class="register-cont d-flex flex-column align-items-center mx-auto">
-    <h1 class="text-center mb-5">Регистрация аккаунта</h1>
+    <h1 class="text-center mb-5">Реєстрація акаунта</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class=" btn btn-outline-dark">Зарегистрироваться</button>
-        <a href="/users/login/" class="btn btn-outline-dark">Вход</a>
+        <button type="submit" class=" btn btn-outline-dark">Зареєструватися</button>
+        <a href="/users/login/" class="btn btn-outline-dark">Вхід</a>
     </form>
 </div>
 {% endblock content %}

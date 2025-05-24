@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
-
 </head>
 <body>
     <header class="header sticky-top">
@@ -37,7 +36,7 @@
                 <input
                     type="text"
                     class="form-control"
-                    placeholder="Поиск товаров..."
+                    placeholder="Пошук товарів..."
                     name="q"
                     x-model="query"
                     @input.debounce.300ms="fetchSuggestions"
@@ -91,14 +90,14 @@
         <navbar class="header-nav">
             <ul class="header-list d-flex flex-wrap gap-4 m-0 p-0">
                 {% if user.is_authenticated %}
-                    <li><a href="/users/profile" class="nav-a1">Профиль</a></li>
-                    <li><a href="#" class="nav-a3">Избранное</a></li>
-                    <li><a href="/cart/" class="nav-a2">Корзина</a></li>
+                    <li><a href="/users/profile" class="nav-a1">Профіль</a></li>
+                    <li><a href="#" class="nav-a3">Бажанні</a></li>
+                    <li><a href="/cart/" class="nav-a2">Кошик</a></li>
                 {% else %}
-                    <li><a href="/users/login/" class="nav-a1">Вход</a></li>
-                    <li><a href="/users/register/" class="nav-a4">Регистрация</a></li>
-                    <li><a href="#" class="nav-a3">Избранное</a></li>
-                    <li><a href="/cart/" class="nav-a2">Корзина</a></li>
+                    <li><a href="/users/login/" class="nav-a1">Вхід</a></li>
+                    <li><a href="/users/register/" class="nav-a4">Реєстрація</a></li>
+                    <li><a href="#" class="nav-a3">Бажанні</a></li>
+                    <li><a href="/cart/" class="nav-a2">Кошик</a></li>
                 {% endif %}
             </ul>
         </navbar>

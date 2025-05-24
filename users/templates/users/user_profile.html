@@ -3,20 +3,20 @@
 
 
 
-{% block title %}Вход{% endblock title %}
+{% block title %}Вхід{% endblock title %}
 
 {% block content %}
 
 <div class="profile-cont d-flex flex-column align-items-center">
-    <h1 class="text-center mb-5">Профиль Пользователя </h1>
+    <h1 class="text-center mb-5">Профіль Користувача </h1>
 
         <ul>
         <li><strong>Email:</strong> {{ user.email }}</li>
-        <li><strong>Имя</strong> {{ user.first_name }}</li>
-        <li><strong>Фамилия:</strong> {{ user.last_name }}</li>
+        <li><strong>Ім'я</strong> {{ user.first_name }}</li>
+        <li><strong>Фамілія:</strong> {{ user.last_name }}</li>
     </ul>
 
-        <a href="/users/logout/" class="btn btn-danger mt-3">Выход из Аккаунта Пользователя</a>
+        <a href="/users/logout/" class="btn btn-danger mt-3">Вихід з Акаунта Користувача</a>
 
 </div>
 {% endblock content %}

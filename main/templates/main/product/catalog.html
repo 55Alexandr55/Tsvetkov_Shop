@@ -7,7 +7,7 @@
     <div class="catalog d-flex">
         <form method="get" action="{% url 'main:catalog' %}" class="sidebar" id="filter-form">
 
-            <h4 class="price-head">Цена, грн:</h4>
+            <h4 class="price-head">Ціна, грн:</h4>
             <div class="price-range">
                 <input type="number" name="min_price" id="min_price" placeholder="от"
                        value="{{ request.GET.min_price }}" oninput="debounceApplyFilters()">
@@ -15,7 +15,7 @@
                        value="{{ request.GET.max_price }}" oninput="debounceApplyFilters()">
             </div>
 
-            <h4 class="category-head">Категории:</h4>
+            <h4 class="category-head">Категорії:</h4>
             {% for category in categories %}
                 <div class="category-option d-flex gap-2">
                     <input type="checkbox" name="category" id="category-{{ category.slug }}" value="{{ category.slug }}"
@@ -78,15 +78,15 @@
                             <!--ДОБАВЛЕНИЕ В КОРЗИНУ -->
                             <form action="{% url 'cart:cart_add' item.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-cart1" aria-label="Добавить в корзину">
-                                    <img src="{% static 'images/cart.png' %}" alt="Корзина"/>
+                                <button type="submit" class="btn-cart1" aria-label="Додати у кошик">
+                                    <img src="{% static 'images/cart.png' %}" alt="Кошик"/>
                                 </button>
                             </form>
                         </div>
 
                     </div>
                 {% empty %}
-                    <p>Нет товаров для отображения.</p>
+                    <p>Нема товарів для відображення</p>
                 {% endfor %}
             </div>
         </div>

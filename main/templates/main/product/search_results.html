@@ -10,7 +10,7 @@
 
         <input type="hidden" name="q" value="{{ query }}">
 
-        <h4 class="price-head">Цена, грн:</h4>
+        <h4 class="price-head">Ціна, грн:</h4>
         <div class="price-range">
             <input type="number" name="min_price" id="min_price" placeholder="от"
                    value="{{ request.GET.min_price }}" oninput="debounceApplyFilters()">
@@ -18,7 +18,7 @@
                    value="{{ request.GET.max_price }}" oninput="debounceApplyFilters()">
         </div>
 
-        <h4 class="category-head">Категории:</h4>
+        <h4 class="category-head">Категорії:</h4>
         {% for category in categories %}
             <div class="category-option d-flex gap-2">
                 <input type="checkbox" name="category" id="category-{{ category.slug }}" value="{{ category.slug }}"
@@ -33,7 +33,7 @@
 
     <!-- Результаты поиска -->
     <div class="product-list">
-        <h2 class="mb-3 ms-4">Результаты поиска по запросу"{{ query }}"</h2>
+        <h2 class="mb-3 ms-4">Результати пошуку по запросу:"{{ query }}"</h2>
 
         <div class="card-container d-flex flex-wrap ms-4">
             {% if products %}
@@ -51,15 +51,15 @@
                         <div class="cartc">
                             <form action="{% url 'cart:cart_add' item.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-cart1" aria-label="Добавить в корзину">
-                                    <img src="{% static 'images/cart.png' %}" alt="Корзина"/>
+                                <button type="submit" class="btn-cart1" aria-label="Додати в кошик">
+                                    <img src="{% static 'images/cart.png' %}" alt="Кошик"/>
                                 </button>
                             </form>
                         </div>
                     </div>
                 {% endfor %}
             {% else %}
-                <p>Ничего не найдено.</p>
+                <p>Нічого не знайдено.</p>
             {% endif %}
         </div>
     </div>

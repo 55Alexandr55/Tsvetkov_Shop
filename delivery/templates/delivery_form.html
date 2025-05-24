@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Оформлення доставки</title>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="p-4 bg-light">
 <meta name="csrf-token" content="{{ csrf_token }}">
 
-
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <div class="container bg-white p-4 rounded shadow">
     <div class="row">
         <!-- Левая колонка: товары c корзіні -->
-        <div class="col-md-6 border-end pe-4">
+        <div class="col-md-7 border-end pe-4">
             <h5 class="mb-3 fs-3">Ваше замовлення:</h5>
             <template x-if="cart.length === 0">
                 <p>Кошик порожній</p>
@@ -27,12 +27,12 @@
                     </div>
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between ">
-                            <div>
-                                <strong>{{ item.item.name }}</strong><br>
-                                <small>Кількість: {{ item.quantity }}</small>
+                            <div class="item-name-delivery" style="width: 310px;word-wrap: break-word; ">
+                                <span>{{ item.item.name }}</span><br>
+                                <strong>Кількість: {{ item.quantity }}</strong>
                             </div>
                             <div>
-                                <span class="fw-semibold">{{ item.total_price|floatformat:0 }} грн</span>
+                                <strong class="fw-semibold">{{ item.total_price|floatformat:0 }} грн</strong>
                             </div>
                         </div>
                     </div>
@@ -40,13 +40,13 @@
             {% endfor %}
 
 
-            <div class="mt-4">
+            <div class="mt-4 fs-5" style="padding-left: 100px ">
                 <strong>Загальна вартість: {{ total_price|floatformat:0 }} грн</strong>
             </div>
         </div>
 
         <!-- Правая колонка: форма доставки товара -->
-        <div class="col-md-6 ps-4">
+        <div class="col-md-5 ps-4">
             <h3 class="mb-4">Оформлення доставки</h3>
 
             <!-- Выбор способа доставки -->
