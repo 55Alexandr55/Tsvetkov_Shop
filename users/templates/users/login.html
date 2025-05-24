@@ -15,5 +15,23 @@
         <button type="submit" class=" btn btn-outline-dark">Вхід</button>
         <a href="/users/register/" class="btn btn-outline-dark">Реєстрація</a>
     </form>
+
+
+<!-- Модальное окно успешного входа в профиль -->
+<div x-data="{ showSuccess: {{ show_success|default_if_none:False|yesno:'true,false' }} }">
+    <div x-show="showSuccess" x-transition
+         class="position-fixed top-50 start-50 translate-middle bg-white text-dark border rounded shadow-lg p-4"
+         style="z-index: 1055; width: 90%; max-width: 400px;" x-cloak>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="m-0">Вхід успішний</h5>
+            <!--Кнопка для закрівания Успешного окна и переход в каталог  -->
+            <button @click="showSuccess = false; window.location.href = '{% url 'main:catalog' %}'" class="btn-close" aria-label="Закрити"></button>
+        </div>
+        <p class="mb-0">Ви успішно увійшли до свого акаунту! Тепер ви можете замовляти товари!</p>
+    </div>
+
+    <div x-show="showSuccess" x-transition.opacity
+         class="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75"
+         style="z-index: 1050;" x-cloak></div>
 </div>
 {% endblock content %}

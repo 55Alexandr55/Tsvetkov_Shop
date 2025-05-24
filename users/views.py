@@ -33,7 +33,7 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('main:catalog')
+                return render(request, 'users/login.html', {'form': form, 'show_success': True})
             else:
                 form.add_error(None, "Неверный email или пароль.")
     else:
