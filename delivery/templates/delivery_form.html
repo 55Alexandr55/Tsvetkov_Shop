@@ -5,6 +5,13 @@
     <title>Оформлення доставки</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
 </head>
 <body class="p-4 bg-light">
 <meta name="csrf-token" content="{{ csrf_token }}">
@@ -113,10 +120,28 @@
 
             <button class="btn btn-success" @click="submitOrder">Оформити замовлення</button>
 
-            <div class="alert alert-success mt-3" x-show="orderSuccess">
-                Замовлення успішно створено!
+            <!-- Модальное окно ,если успешно создан заказ пользователем -->
+            <div x-show="orderSuccess" x-transition
+                 class="position-fixed top-50 start-50 translate-middle border rounded shadow-lg p-4 bg-success bg-opacity-75 text-white"
+                 style="z-index: 1055; width: 90%; max-width: 400px;" x-cloak>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="m-0">Замовлення прийнято</h5>
+                    <button @click="orderSuccess = false; window.location.href='/'" type="button"
+                            class="btn-close" aria-label="Закрити"></button>
+                </div>
+                <p class="mb-0">Замовлення успішно створено! Очікуйте дзвінка або листа для підтвердження
+                    замовлення.</p>
             </div>
         </div>
+
+
+        <!-- Тёмный фон при успешном создании и обьяіление пользователю -->
+        <div x-show="orderSuccess" x-transition.opacity
+             class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-80"
+             style="z-index: 1050;" x-cloak>
+        </div>
+
 
         <script>
             function deliveryApp(totalPrice) {
