@@ -54,7 +54,8 @@ def delivery_form(request):
     total_price = cart.get_total_price()  # итоговая сумма
 
     return render(request, 'delivery_form.html', {
-        'total_price': round(total_price, 2)  # передаём в шаблон
+        'total_price': round(total_price, 2), # передаём в шаблон
+        'cart': cart, # добавляю корзину
     })
 
 

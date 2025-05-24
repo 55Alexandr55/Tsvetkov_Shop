@@ -1,166 +1,202 @@
 <!DOCTYPE html>
 <html lang="uk" x-data="deliveryApp({{ total_price|safe }})" x-init="init()">
 <head>
-  <meta charset="UTF-8">
-  <title>Оформлення доставки</title>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Оформлення доставки</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="p-4 bg-light">
-    <meta name="csrf-token" content="{{ csrf_token }}">
+<meta name="csrf-token" content="{{ csrf_token }}">
 
 
-  <div class="container bg-white p-4 rounded shadow">
-    <h3 class="mb-4">Оформлення доставки</h3>
-
-    <!-- Выбор способа доставки -->
-    <div class="mb-3">
-      <label class="form-label">Спосіб доставки:</label>
-      <select class="form-select" x-model="deliveryMethod">
-        <option value="pickup">Самовивіз з м.Одеса проспект Шевченка, 1</option>
-        <option value="np">Нова Пошта</option>
-      </select>
-    </div>
-
-    <!-- Поля для всех -->
-    <div class="mb-3">
-        <label>Ім’я та прізвище:</label>
-        <input class="form-control" x-model="form.full_name">
-        <div class="text-danger" x-text="errors.full_name" x-show="errors.full_name"></div>
-
-    </div>
-
-    <div class="mb-3">
-        <label>Телефон:</label>
-        <input class="form-control" x-model="form.phone_number">
-        <div class="text-danger" x-text="errors.phone_number" x-show="errors.phone_number"></div>
-    </div>
-
-    <div class="mb-3">
-      <label>Email:</label>
-      <input class="form-control" x-model="form.email" type="email">
-      <div class="text-danger" x-text="errors.email" x-show="errors.email"></div>
-    </div>
-
-    <!-- Только если выбрана доставка Новой Почтой -->
-    <template x-if="deliveryMethod === 'np'">
-      <div>
-        <div class="mb-3">
-          <label>Місто:</label>
-          <select class="form-select" x-model="selectedCity" @change="loadWarehouses">
-            <option value="">Оберіть місто</option>
-            <template x-for="city in cities" :key="city.Ref">
-              <option :value="city.Ref" x-text="city.Description"></option>
-                <div class="text-danger" x-text="errors.city" x-show="errors.city"></div>
+<div class="container bg-white p-4 rounded shadow">
+    <div class="row">
+        <!-- Левая колонка: товары c корзіні -->
+        <div class="col-md-6 border-end pe-4">
+            <h5 class="mb-3 fs-3">Ваше замовлення:</h5>
+            <template x-if="cart.length === 0">
+                <p>Кошик порожній</p>
             </template>
-          </select>
+
+            {% for item in cart %}
+                <div class="mb-3 p-2 border rounded d-flex">
+                    <div class="me-3">
+                        <img src="{{ item.item.image.url }}" alt="{{ item.item.name }}"
+                             style="width: 70px; height: 70px; object-fit: cover;" class="rounded">
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between ">
+                            <div>
+                                <strong>{{ item.item.name }}</strong><br>
+                                <small>Кількість: {{ item.quantity }}</small>
+                            </div>
+                            <div>
+                                <span class="fw-semibold">{{ item.total_price|floatformat:0 }} грн</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+            <div class="mt-4">
+                <strong>Загальна вартість: {{ total_price|floatformat:0 }} грн</strong>
+            </div>
         </div>
 
-        <div class="mb-3">
-          <label>Відділення:</label>
-          <select class="form-select" x-model="form.warehouse">
-            <option value="">Оберіть відділення</option>
-            <template x-for="w in warehouses" :key="w.Ref">
-              <option :value="w.Description" x-text="w.Description"></option>
-                <div class="text-danger" x-text="errors.warehouse" x-show="errors.warehouse"></div>
+        <!-- Правая колонка: форма доставки товара -->
+        <div class="col-md-6 ps-4">
+            <h3 class="mb-4">Оформлення доставки</h3>
+
+            <!-- Выбор способа доставки -->
+            <div class="mb-3">
+                <label class="form-label">Спосіб доставки:</label>
+                <select class="form-select" x-model="deliveryMethod">
+                    <option value="pickup">Самовивіз з м.Одеса проспект Шевченка, 1</option>
+                    <option value="np">Нова Пошта</option>
+                </select>
+            </div>
+
+            <!-- Поля для Самовівоза и Новой Почтой -->
+            <div class="mb-3">
+                <label>Ім’я та прізвище:</label>
+                <input class="form-control" x-model="form.full_name">
+                <div class="text-danger" x-text="errors.full_name" x-show="errors.full_name"></div>
+
+            </div>
+
+            <div class="mb-3">
+                <label>Телефон:</label>
+                <input class="form-control" x-model="form.phone_number">
+                <div class="text-danger" x-text="errors.phone_number" x-show="errors.phone_number"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Email:</label>
+                <input class="form-control" x-model="form.email" type="email">
+                <div class="text-danger" x-text="errors.email" x-show="errors.email"></div>
+            </div>
+
+            <!-- Только если выбрана доставка Новой Почтой -->
+            <template x-if="deliveryMethod === 'np'">
+                <div>
+                    <div class="mb-3">
+                        <label>Місто:</label>
+                        <select class="form-select" x-model="selectedCity" @change="loadWarehouses">
+                            <option value="">Оберіть місто</option>
+                            <template x-for="city in cities" :key="city.Ref">
+                                <option :value="city.Ref" x-text="city.Description"></option>
+                                <div class="text-danger" x-text="errors.city" x-show="errors.city"></div>
+                            </template>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Відділення:</label>
+                        <select class="form-select" x-model="form.warehouse">
+                            <option value="">Оберіть відділення</option>
+                            <template x-for="w in warehouses" :key="w.Ref">
+                                <option :value="w.Description" x-text="w.Description"></option>
+                                <div class="text-danger" x-text="errors.warehouse" x-show="errors.warehouse"></div>
+                            </template>
+                        </select>
+                    </div>
+                </div>
             </template>
-          </select>
+
+            <!-- Стоимость -->
+            <div class="mb-3">
+                <label>Загальна вартість (грн):</label>
+                <input class="form-control" type="number" x-model="form.total_price" readonly>
+            </div>
+
+            <button class="btn btn-success" @click="submitOrder">Оформити замовлення</button>
+
+            <div class="alert alert-success mt-3" x-show="orderSuccess">
+                Замовлення успішно створено!
+            </div>
         </div>
-      </div>
-    </template>
 
-    <!-- Стоимость -->
-    <div class="mb-3">
-      <label>Загальна вартість:</label>
-      <input class="form-control" type="number" x-model="form.total_price" readonly>
-    </div>
-
-    <button class="btn btn-success" @click="submitOrder">Оформити замовлення</button>
-
-    <div class="alert alert-success mt-3" x-show="orderSuccess">
-      Замовлення успішно створено!
-    </div>
-  </div>
-
-<script>
-function deliveryApp(totalPrice) {
-  return {
-    deliveryMethod: 'np',
-    cities: [],
-    warehouses: [],
-    selectedCity: '',
-    orderSuccess: false,
-    errors: {},
-    form: {
-      full_name: '',
-      phone_number: '+380',
-      email: '@gmail.com',
-      warehouse: '',
-      total_price: totalPrice
-    },
-    init() {
-      fetch('/delivery/api/get_cities/')
-        .then(res => res.json())
-        .then(data => this.cities = data.data);
-    },
-    loadWarehouses() {
-      fetch(`/delivery/api/get_warehouses/?cityRef=${this.selectedCity}`)
-        .then(res => res.json())
-        .then(data => this.warehouses = data.data);
-    },
-    validateForm() {
-      this.errors = {};
-      const nameRegex = /^[А-Яа-яІіЇїЄєҐґ\s'-]{2,}$/u;
-      const phoneRegex = /^\+380\d{9}$/;
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        <script>
+            function deliveryApp(totalPrice) {
+                return {
+                    deliveryMethod: 'np',
+                    cities: [],
+                    warehouses: [],
+                    selectedCity: '',
+                    orderSuccess: false,
+                    errors: {},
+                    form: {
+                        full_name: '',
+                        phone_number: '+380',
+                        email: '@gmail.com',
+                        warehouse: '',
+                        total_price: totalPrice
+                    },
+                    init() {
+                        fetch('/delivery/api/get_cities/')
+                            .then(res => res.json())
+                            .then(data => this.cities = data.data);
+                    },
+                    loadWarehouses() {
+                        fetch(`/delivery/api/get_warehouses/?cityRef=${this.selectedCity}`)
+                            .then(res => res.json())
+                            .then(data => this.warehouses = data.data);
+                    },
+                    validateForm() {
+                        this.errors = {};
+                        const nameRegex = /^[А-Яа-яІіЇїЄєҐґ\s'-]{2,}$/u;
+                        const phoneRegex = /^\+380\d{9}$/;
+                        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
-      if (!nameRegex.test(this.form.full_name))
-        this.errors.full_name = 'Введіть коректне ім’я (укр/рус)';
-      if (!phoneRegex.test(this.form.phone_number))
-        this.errors.phone_number = 'Телефон має бути у форматі +380XXXXXXXXX';
-      if (!emailRegex.test(this.form.email))
-        this.errors.email = 'Невірний формат email';
-      if (this.deliveryMethod === 'np' && !this.selectedCity)
-        this.errors.city = 'Оберіть місто';
-      if (this.deliveryMethod === 'np' && !this.form.warehouse)
-        this.errors.warehouse = 'Оберіть відділення';
+                        if (!nameRegex.test(this.form.full_name))
+                            this.errors.full_name = 'Введіть коректне ім’я (укр/рус)';
+                        if (!phoneRegex.test(this.form.phone_number))
+                            this.errors.phone_number = 'Телефон має бути у форматі +380XXXXXXXXX';
+                        if (!emailRegex.test(this.form.email))
+                            this.errors.email = 'Невірний формат email';
+                        if (this.deliveryMethod === 'np' && !this.selectedCity)
+                            this.errors.city = 'Оберіть місто';
+                        if (this.deliveryMethod === 'np' && !this.form.warehouse)
+                            this.errors.warehouse = 'Оберіть відділення';
 
-      return Object.keys(this.errors).length === 0;
-    },
-    submitOrder() {
-      if (!this.validateForm()) return;
+                        return Object.keys(this.errors).length === 0;
+                    },
+                    submitOrder() {
+                        if (!this.validateForm()) return;
 
-      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-      const payload = {
-        ...this.form,
-        city: this.selectedCity,
-        delivery_method: this.deliveryMethod
-      };
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        const payload = {
+                            ...this.form,
+                            city: this.selectedCity,
+                            delivery_method: this.deliveryMethod
+                        };
 
-      fetch('/delivery/api/submit_order/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (!res.ok) throw new Error('Щось пішло не так');
-        return res.json();
-      })
-      .then(data => {
-        if (data.success) this.orderSuccess = true;
-      })
-      .catch(error => {
-        console.error('Помилка при відправці замовлення:', error);
-      });
-    }
-  }
-}
+                        fetch('/delivery/api/submit_order/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+                            credentials: 'same-origin',
+                            body: JSON.stringify(payload)
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error('Щось пішло не так');
+                                return res.json();
+                            })
+                            .then(data => {
+                                if (data.success) this.orderSuccess = true;
+                            })
+                            .catch(error => {
+                                console.error('Помилка при відправці замовлення:', error);
+                            });
+                    }
+                }
+            }
 
-</script>
+        </script>
 </body>
 </html>
