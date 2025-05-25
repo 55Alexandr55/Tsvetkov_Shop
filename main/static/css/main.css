@@ -44,12 +44,6 @@ li {
     list-style: none;
 }
 
-body1 {
-    background-color: #ffffff;
-    color: #fff;
-    width: 1268px;
-    height: 1000px;
-}
 header {
     margin-bottom: 40px;
     background: #2b2f32;
@@ -86,13 +80,65 @@ header.header {
 
 
 
-.container1 {
-    max-width: 1920px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0px 20px;
-    color: #121212;
+
+/* СТИЛИ Для Футера--------------------------------------------------------------------------------------------------*/
+
+
+.footer {
+  background-color: #2b2f32; /* такой же как у хедера */
+  color: #fff;
+  padding: 40px 20px;
+  font-size: 14px;
+  margin-top: 100px;
 }
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* равномерно распределим колонки */
+  border-top: 1px solid #444; /* верхняя граница футера */
+  border-bottom: 1px solid #444; /* нижняя граница футера */
+}
+
+.footer-column {
+  flex: 1; /* чтобы колонки одинаковой ширины */
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #444; /* разделитель колонок */
+}
+
+.footer-column:first-child {
+  border-left: none; /* у первой колонки разделителя слева не будет */
+}
+
+.footer-column h4 {
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 16px;
+  border-bottom: 2px solid #157347; /* красная линия под заголовком */
+  padding-bottom: 8px;
+}
+
+.footer-column p,
+.footer-column a {
+  margin: 6px 0;
+  color: #ccc;
+  text-decoration: none;
+}
+
+.footer-column a:hover {
+  color: #dc3545;
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
 
 
 /* СТИЛИ Для поиска--------------------------------------------------------------------------------------------------*/
@@ -136,22 +182,24 @@ header.header {
 
 }
 
-
 .sidebar {
-    width: 250px; /* ширина фильтра */
-    padding: 20px; /* внутренние отступы */
+    width: 250px;
+    padding: 20px;
     background-color: #ffffff;
     border-right: 1px solid #ccc;
-    min-height: 100vh; /* на всю высоту страницы */
+    height: 100vh;        /* высота равна высоте окна */
+    overflow-y: hidden;   /* прокрутка выключена по умолчанию */
     color: #121212;
     font-size: 12px;
-    top: 0;
-    overflow-y: scroll;
-    height: 1300px;
-
-
-
+    position: sticky;     /* чтобы фильтр оставался на экране */
+    top: 70px;            /* с учётом высоты шапки */
+    transition: overflow-y 0.3s ease; /* плавный переход для overflow */
 }
+
+.sidebar:hover {
+    overflow-y: auto;    /* прокрутка включается при наведении */
+}
+
 
 .category-len{
     padding-left: 7px;

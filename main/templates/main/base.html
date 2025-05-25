@@ -92,12 +92,10 @@
             <ul class="header-list d-flex flex-wrap gap-4 m-0 p-0">
                 {% if user.is_authenticated %}
                     <li><a href="/users/profile" class="nav-a1">Профіль</a></li>
-                    <li><a href="#" class="nav-a3">Бажанні</a></li>
                     <li><a href="/cart/" class="nav-a2">Кошик</a></li>
                 {% else %}
                     <li><a href="/users/login/" class="nav-a1">Вхід</a></li>
                     <li><a href="/users/register/" class="nav-a4">Реєстрація</a></li>
-                    <li><a href="#" class="nav-a3">Бажанні</a></li>
                     <li><a href="/cart/" class="nav-a2">Кошик</a></li>
                 {% endif %}
             </ul>
@@ -109,6 +107,52 @@
     <div class="container">
     {% block content %}{% endblock content %}
 </div>
+
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>Телефон</h4>
+      <p>+38 (068) 193-51-58</p>
+    </div>
+    <div class="footer-column">
+      <h4>Адреса</h4>
+      <p>УкраЇна, Одеса</p>
+      <p>просп. Шевченка 1</p>
+    </div>
+    <div class="footer-column">
+      <h4>Контакти</h4>
+      <p>Email: cvetkov.12221420@stud.op.edu.ua</p>
+    </div>
+    <div class="footer-column">
+      <h4>Соцмережі</h4>
+      <p><a href="#">Facebook</a></p>
+      <p><a href="#">Instagram</a></p>
+      <p><a href="#">Twitter</a></p>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     {% comment %} js for boorstrap {% endcomment %}
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
