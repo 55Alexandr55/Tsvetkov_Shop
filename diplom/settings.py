@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     #корзина покупок
     'cart',
     #Доставка Новая почта
-    'delivery'
+    'delivery',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -173,3 +174,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'users.User'
 
 CART_SESSION_ID = 'cart'
+
+
+
+#Для построение модели классов:
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
