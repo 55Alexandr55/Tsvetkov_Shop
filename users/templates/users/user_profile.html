@@ -10,10 +10,19 @@
 <div class="profile-cont d-flex flex-column align-items-center">
     <h1 class="text-center mb-5">Профіль Користувача </h1>
 
-        <ul>
-        <li><strong>Email:</strong> {{ user.email }}</li>
-        <li><strong>Ім'я</strong> {{ user.first_name }}</li>
-        <li><strong>Фамілія:</strong> {{ user.last_name }}</li>
+            <ul class="list-unstyled text-center">
+
+        <li class="mb-2 d-flex justify-content-center align-items-center gap-2">
+            <strong>Ім'я:</strong> {{ user.first_name }}
+            <button class="btn btn-outline-success btn-sm">Редагувати</button>
+        </li>
+        <li class="mb-2 d-flex justify-content-center align-items-center gap-2">
+            <strong>Фамілія:</strong> {{ user.last_name }}
+            <button class="btn btn-outline-success btn-sm">Редагувати</button>
+        </li>
+                <li class="mb-2 d-flex justify-content-center align-items-center gap-2">
+            <strong>Email:</strong> {{ user.email }}
+        </li>
     </ul>
 
         <a href="/users/logout/" class="btn btn-danger mt-3">Вихід з Акаунта Користувача</a>

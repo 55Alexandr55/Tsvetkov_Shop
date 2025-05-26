@@ -4,7 +4,7 @@
 {% block title %}Shop{% endblock title %}
 
 {% block content %}
-    <div class="catalog d-flex">
+    <div class="catalog d-flex ">
         <form method="get" action="{% url 'main:catalog' %}" class="sidebar" id="filter-form">
 
             <h4 class="price-head">Ціна, грн:</h4>
@@ -17,12 +17,12 @@
 
             <h4 class="category-head">Категорії:</h4>
             {% for category in categories %}
-                <div class="category-option d-flex gap-2">
+                <div class="category-option d-flex gap-2 pt-2">
                     <input type="checkbox" name="category" id="category-{{ category.slug }}" value="{{ category.slug }}"
                             {% if category.slug in selected_categories %} checked{% endif %} onchange="applyFilters()">
-                    <label for="category-{{ category.slug }}" class="d-flex">
-                        <div class="category-name">{{ category.name }}</div>
-                        <div class="category-len"> ({{ category.get_item_count }})</div>
+                    <label for="category-{{ category.slug }} " class="d-flex ">
+                        <div class="category-name">{{ category.name }} ({{ category.get_item_count }})</div>
+
                     </label>
                 </div>
             {% endfor %}
@@ -40,7 +40,7 @@
                                 </div>
                             {% endif %}
                             <div class="card-info">
-                                <h4 class="item-name-h4">{{ item.name|truncatechars:53 }}</h4>
+                                <h4 class="item-name-h4">{{ item.name|truncatechars:52 }}</h4>
 
                                  <!--РЕЙТИНГ ДЛЯ ТОВАРА В ЗВЕЗДОЧКАХ -->
                                 <div class="rating mt-2  ms-2" style="font-size: 1.1; line-height: 1;">
