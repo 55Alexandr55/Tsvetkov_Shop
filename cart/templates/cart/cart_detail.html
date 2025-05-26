@@ -50,7 +50,7 @@
                                 </form>
                             </div>
                             <div class="c-item-total">
-                                {{ item.total_price|floatformat:2 }}грн
+                                {{ item.total_price|floatformat:0 }}грн
                             </div>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
     </div>
     {% if cart|length > 0 %}
         <div class="d-flex justify-content-center align-items-center gap-5 mt-5">
-            <h3 class="mb-0">Загальна ціна товарів: {{ cart.get_total_price|floatformat:2 }} грн</h3>
+            <h3 class="mb-0">Загальна ціна товарів: {{ cart.get_total_price|floatformat:0 }} грн</h3>
             <a href="/delivery/" class="btn btn-success">Оформити замовлення</a>
         </div>
 

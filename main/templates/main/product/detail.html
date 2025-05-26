@@ -66,14 +66,14 @@
                 <div class="mt-3 d-flex flex-column">
                     {% if item.discount %}
                         <div class="d-flex align-items-center gap-2">
-                            <span class="text-decoration-line-through text-muted fs-5">{{ item.price }} грн</span>
-                            <span class="badge bg-danger w-auto">-{{ item.discount }}%</span>
+                            <span class="text-decoration-line-through text-muted fs-5">{{ item.price|floatformat:0 }} грн</span>
+                            <span class="badge bg-danger w-auto">-{{ item.discount|floatformat:0 }}%</span>
                         </div>
                         <div>
-                            <span class="fs-3 text-danger">{{ item.get_price_with_discount }} грн</span>
+                            <span class="fs-3 text-danger">{{ item.get_price_with_discount|floatformat:0 }} грн</span>
                         </div>
                     {% else %}
-                        <div class="fs-3">{{ item.price }} грн</div>
+                        <div class="fs-3">{{ item.price|floatformat:0 }} грн</div>
                     {% endif %}
                 </div>
 

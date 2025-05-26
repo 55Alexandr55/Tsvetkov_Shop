@@ -184,7 +184,7 @@ header.header {
 
 .sidebar {
     width: 250px;
-    padding: 20px;
+    padding: 0px;
     background-color: #ffffff;
     border-right: 1px solid #ccc;
     height: 100vh;        /* высота равна высоте окна */
@@ -241,7 +241,7 @@ header.header {
 
 .product-list {    /* класс с сеткой товаров */
     flex-grow: 1;
-    padding: 0px;
+    padding: 20px;
     width: 1268px;
     height: 1300px;
 
